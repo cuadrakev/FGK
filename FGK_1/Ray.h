@@ -20,5 +20,9 @@ public:
 		origin = o;
 		direction = d;
 	}
+	
+	float3 getOrigin() const { return origin; };
+	float3 getDirection() const { return direction; };
+	float3 operator()(float t);
 };
 
