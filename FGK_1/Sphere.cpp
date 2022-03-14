@@ -24,10 +24,13 @@ HitData Sphere::intersects(Ray &ray)
 	
 	if(delta == 0)
 	{
-		hitData.distance = b;
-		hitData.result = HitData::Tangent;
-		hitData.hitPoint = ray(hitData.distance);
-		hitData.normal = (hitData.hitPoint - center) / radius;
+		if(b > 0)
+		{
+			hitData.distance = b;
+			hitData.result = HitData::Tangent;
+			hitData.hitPoint = ray(hitData.distance);
+			hitData.normal = (hitData.hitPoint - center) / radius;
+		}
 	}
 	else if(delta > 0)
 	{

@@ -33,7 +33,7 @@ int main()
         std::cout<<"No hit between R2 and S\n";
     }
     
-    Ray r3(float3(20, 10, 0), float3(1, 0, 0));
+    Ray r3(float3(20, 10, 0), float3(-1, 0, 0));
     HitData s_r3 = s.intersects(r3);
     if(s_r3.result == HitData::Tangent)
     {
