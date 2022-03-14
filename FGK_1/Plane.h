@@ -4,12 +4,12 @@
 #include "Ray.h"
 #include "HitData.h"
 
-class Surface
+class Plane
 {
 public:
 
-	Surface();
-	Surface(float3 normal, float d);
+	Plane();
+	Plane(float3 normal, float d);
 	
 	HitData intersects(Ray &ray);
 	

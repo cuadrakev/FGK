@@ -1,18 +1,18 @@
-#include "Surface.h"
+#include "Plane.h"
 
-Surface::Surface()
+Plane::Plane()
 {
-	Surface({0, 0, 0}, 0);
+	Plane({0, 0, 0}, 0);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-Surface::Surface(float3 normal, float d):normal(normal), d(d)
+Plane::Plane(float3 normal, float d):normal(normal), d(d)
 {
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Surface::intersects(Ray &ray)
+HitData Plane::intersects(Ray &ray)
 {
 	HitData hitData{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
 	
