@@ -101,9 +101,9 @@ float3 float3x3::getColumn(int c)
 
 float float3x3::getDeterminant()
 {
-	return entry[0][0] * (entry[1][1]*entry[2][2] - entry[1][2]*entry[2][1]) -
-		entry[1][0] * (entry[0][0] * entry[2][2] - entry[0][2] * entry[2][0]) +
-		entry[2][0] * (entry[0][0] * entry[1][1] - entry[1][0] * entry[0][1]);
+	return entry[0][0] * (entry[1][1] * entry[2][2] - entry[1][2] * entry[2][1]) -
+		entry[0][1] * (entry[1][0] * entry[2][2] - entry[1][2] * entry[2][0]) +
+		entry[0][2] * (entry[1][0] * entry[2][1] - entry[1][1] * entry[2][0]);
 }
 
 void float3x3::multiplyRow(int r, float s)
@@ -253,6 +253,6 @@ std::string float3x3::ToString()
 	std::string str = "";
 
 	for (int r = 0; r < ROWS; r++)
-		str += getRow(r).ToString();
+		str += getRow(r).ToString() + '\n';
 	return str;
 }

@@ -125,9 +125,10 @@ float4 float4x4::getColumn(int c)
 
 float float4x4::getDeterminant()
 {
-	return entry[0][0] * (entry[1][1] * entry[2][2] - entry[1][2] * entry[2][1]) -
-		entry[1][0] * (entry[0][0] * entry[2][2] - entry[0][2] * entry[2][0]) +
-		entry[2][0] * (entry[0][0] * entry[1][1] - entry[1][0] * entry[0][1]); ////
+	return entry[0][0] * subMatrix(0,0).getDeterminant() -
+		entry[1][0] * subMatrix(1, 0).getDeterminant() +
+		entry[2][0] * subMatrix(2, 0).getDeterminant() -
+		entry[3][0] * subMatrix(3, 0).getDeterminant(); ////
 }
 
 void float4x4::multiplyRow(int r, float s)
@@ -277,6 +278,6 @@ std::string float4x4::ToString()
 	std::string str = "";
 
 	for (int r = 0; r < ROWS; r++)
-		str += getRow(r).ToString();
+		str += getRow(r).ToString() + '\n';
 	return str;
 }

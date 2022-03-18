@@ -8,11 +8,11 @@ float4::float4()
 	w = 0;
 }
 
-float4::float4(float x, float y, float z, float w = 1) : x(x), y(y), z(z), w(w)
+float4::float4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w)
 {
 }
 
-float4::float4(float3 v, float w = 1)
+float4::float4(float3 v, float w)
 {
 	x = v.x;
 	y = v.y;

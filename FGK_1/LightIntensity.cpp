@@ -142,7 +142,7 @@ LightIntensity operator*(LightIntensity& li, float num)
 	return newLI;
 }
 
-std::ostream& operator<<(std::ostream& str, LightIntensity& li)
-{
-	// TODO: tu wstawiæ instrukcjê return
-}
+//std::ostream& operator<<(std::ostream& str, LightIntensity& li)
+//{
+//	// TODO: tu wstawiæ instrukcjê return
+//}
