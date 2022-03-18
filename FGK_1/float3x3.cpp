@@ -6,7 +6,7 @@ float3x3 float3x3::adjointMatrix()
 
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
-			entr[r][c] = subDeterminant(r, c);
+			entr[r][c] = subDeterminant(r, c) * (1 - 2*((r+c)%2));
 
 	float3x3 adjoint = float3x3(entr);
 	adjoint = adjoint.transpose();
@@ -204,6 +204,18 @@ float3x3 float3x3::operator*(float s)
 			entr[r][c] = entry[r][c] * s;
 
 	return float3x3(entr);
+}
+
+float3 float3x3::operator*(float3 v)
+{
+	float3 rowVectors[ROWS];
+
+	for (int r = 0; r < ROWS; r++)
+		rowVectors[r] = getRow(r);
+
+	float3 result = float3(v.DotProduct(rowVectors[0]), v.DotProduct(rowVectors[1]), v.DotProduct(rowVectors[2]));
+
+	return result;
 }
 
 void float3x3::operator+=(float3x3 M)

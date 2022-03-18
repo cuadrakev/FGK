@@ -49,6 +49,8 @@ public:
 
 	float3x3 operator*(float s);
 
+	float3 operator*(float3 v);
+
 	void operator+=(float3x3 M);
 
 	void operator*=(float3x3 M);
