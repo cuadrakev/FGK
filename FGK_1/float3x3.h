@@ -57,6 +57,6 @@ public:
 
 	void operator*=(float s);
 
-
+	std::string ToString();
 };
 

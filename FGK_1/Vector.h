@@ -5,8 +5,6 @@
 class float3
 {
 private:
-	
-
 
 public:
 
