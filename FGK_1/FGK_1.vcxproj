@@ -142,6 +142,8 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="FGK_1.cpp" />
     <ClCompile Include="float3x3.cpp" />
+    <ClCompile Include="float4.cpp" />
+    <ClCompile Include="float4x4.cpp" />
     <ClCompile Include="LightIntensity.cpp" />
     <ClCompile Include="OrthoCamera.cpp" />
     <ClCompile Include="PerspectiveCamera.cpp" />
@@ -154,6 +156,8 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="float3x3.h" />
+    <ClInclude Include="float4.h" />
+    <ClInclude Include="float4x4.h" />
     <ClInclude Include="LightIntensity.h" />
     <ClInclude Include="OrthoCamera.h" />
     <ClInclude Include="PerspectiveCamera.h" />
