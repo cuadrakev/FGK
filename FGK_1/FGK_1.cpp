@@ -4,6 +4,7 @@
 #include "Sphere.h"
 #include "Plane.h"
 #include "float4x4.h"
+#include "Scene.h"
 
 int main()
 {
@@ -59,22 +60,25 @@ int main()
     //    std::cout<<"No hit between R2 and P\n";
     //}
 
-    float4x4 M1 = float4x4::identity4x4();
-    M1.swapRow(0, 2);
-    M1.multiplyRow(1, 5);
-    M1.subtractRow(2, 1, 1);
-    M1.subtractRow(0, 3, 2);
+//    float4x4 M1 = float4x4::identity4x4();
+//    M1.swapRow(0, 2);
+//    M1.multiplyRow(1, 5);
+//    M1.subtractRow(2, 1, 1);
+//    M1.subtractRow(0, 3, 2);
 
-    std::cout << M1.ToString() << '\n';
-    std::cout << M1.getDeterminant() << '\n';
+//    std::cout << M1.ToString() << '\n';
+//    std::cout << M1.getDeterminant() << '\n';
 
-    float4x4 M2 = M1.invert();
+//    float4x4 M2 = M1.invert();
 
-    std::cout << M2.ToString() << '\n';
+//    std::cout << M2.ToString() << '\n';
 
-    float4x4 M3 = M1 * M2;
+//    float4x4 M3 = M1 * M2;
 
-    std::cout << M3.ToString() << '\n';
+//    std::cout << M3.ToString() << '\n';
+    
+    Scene scene(1024, 640);
+    scene.mainLoop();
     
     return 0;
 }

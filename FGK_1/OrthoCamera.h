@@ -1,10 +1,13 @@
 #pragma once
 #include "Camera.h"
-class OrthoCamera :
-    protected Camera
+
+class OrthoCamera: public Camera
 {
 public:
-
-    OrthoCamera(float3 position, float3 target) : Camera(position, target) {}
+	
+	OrthoCamera(unsigned int imageWidth, unsigned int imageHeight, float3 position, float3 target):
+		Camera(imageWidth, imageHeight, position, target) {}
+	
+	void renderScene() override;
 };
 

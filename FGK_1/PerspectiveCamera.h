@@ -9,7 +9,7 @@ private:
 
 public:
 
-    PerspectiveCamera(float3 position, float3 target, float FOV) : Camera(position, target)
+    PerspectiveCamera(float3 position, float3 target, float FOV): Camera(0, 0, position, target)
     {
         fov = FOV;
     }

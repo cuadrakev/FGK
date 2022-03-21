@@ -1,8 +1,25 @@
 #pragma once
 #include "Vector.h"
 
+#include "LightIntensity.h"
+
 class Camera
 {
+public:
+
+	Camera(unsigned int imageWidth, unsigned int imageHeight);
+	Camera(unsigned int imageWidth, unsigned int imageHeight, float3 position, float3 target);
+	~Camera();
+	
+	void setPosition(float3 newPosition) { position = newPosition; }
+	void setTarget(float3 newTarget) { target = newTarget; }
+	
+	unsigned int getRenderWidth() { return renderWidth; }
+	unsigned int getRenderHeight() { return renderHeight; }
+	
+	virtual void renderScene() = 0;
+	void getRGBImage(void *data);
+
 protected:
 	float3 position;
 	float3 target;
@@ -10,27 +27,13 @@ protected:
 
 	float nearPlane;
 	float farPlane;
-
-public:
-
-	Camera()
-	{
-		position = float3(0, 0, 0);
-		target = float3(0, 0, 1);
-		nearPlane = 1;
-		farPlane = 1000;
-		up = float3(0, 1, 0);
-	}
 	
-	Camera(float3 position, float3 target)
-	{
-		position = position;
-		target = target;
-		nearPlane = 1;
-		farPlane = 1000;
-		up = float3(0, 1, 0);
-	}
-
-	virtual void renderScene() = 0;
+	void setPixel(unsigned int x, unsigned int y, LightIntensity &light);
+	LightIntensity getPixel(unsigned int x, unsigned int y);
+	
+private:
+	unsigned int renderWidth;
+	unsigned int renderHeight;
+	LightIntensity *image;
 };
 
