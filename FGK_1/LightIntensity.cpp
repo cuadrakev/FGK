@@ -2,7 +2,6 @@
 
 void LightIntensity::trim()
 {
-    return;
 	if (r < 0)
 		r = 0;
 	else if (r > 1)

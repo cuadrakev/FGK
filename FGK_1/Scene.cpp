@@ -10,7 +10,7 @@ Scene::Scene(unsigned int imageWidth, unsigned int imageHeight):
 	camera(nullptr)
 {
 	//camera = new OrthoCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1));
-	camera = new PerspectiveCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1.), 90.);
+	camera = new PerspectiveCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1.), 3.14159265 / 2.);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

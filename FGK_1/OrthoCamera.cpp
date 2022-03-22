@@ -15,8 +15,10 @@ void OrthoCamera::renderScene(Scene *scene)
 	float3 horizontal;
 	float3 vertical;
 	float3 z;
-	
 	{
+		float height = 1.;
+		float width = float(getRenderWidth()) / float(getRenderHeight());
+		
 		z = this->position - this->target;
 		z = z.Normalize();
 		
@@ -25,9 +27,9 @@ void OrthoCamera::renderScene(Scene *scene)
 		
 		float3 y = z.CrossProduct(x);
 		
-		llCorner = this->position - x * (getRenderWidth() / 2.f) - y * (getRenderHeight() / 2.f) - z;
-		horizontal = x;
-		vertical = y;
+		llCorner = this->position - x * (width / 2.f) - y * (height / 2.f);
+		horizontal = x * width;
+		vertical = y * height;
 	}
 	
 	for(unsigned int y = 0; y < getRenderHeight(); y++)
@@ -37,13 +39,12 @@ void OrthoCamera::renderScene(Scene *scene)
 			LightIntensity pixelLight;
 			LightIntensity currentLight;
 			
-			for(unsigned int rays = 0; rays < 10; rays++)
+			for(unsigned int rays = 0; rays < raysPerPixel; rays++)
 			{
 				currentLight = LightIntensity(0, 0, 0);
 				
 				int horizontalSection = getRenderWidth() / 6;
 				int verticalSection = getRenderHeight() / 6;
-				
 				if(x < horizontalSection or x >= horizontalSection * 3 and x < horizontalSection * 4)
 				{
 					currentLight.add(1., 0., 0.);
@@ -58,11 +59,12 @@ void OrthoCamera::renderScene(Scene *scene)
 				{
 					currentLight.add(0., 0., 1.);
 				}
-				
 				currentLight *= float(y) / float(getRenderHeight());
 				
-				float3 pp = llCorner + horizontal * float(x) + horizontal * (drand48() - 0.5) + vertical * y + vertical * (drand48() - 0.5);
-				Ray ray(pp, float3(0, 0, 0) - z);
+				float xx = (x + drand48()) / float(getRenderWidth());
+				float yy = (y + drand48()) / float(getRenderHeight());
+				float3 org = llCorner + horizontal * xx + vertical * yy;
+				Ray ray(org, float3(0, 0, 0) - z);
 				HitData hit = scene->propagateRay(ray);
 				if(hit.result != HitData::Miss)
 				{
@@ -72,7 +74,7 @@ void OrthoCamera::renderScene(Scene *scene)
 				pixelLight = pixelLight + currentLight;
 			}
 			
-			pixelLight = pixelLight / 10.;
+			pixelLight = pixelLight / raysPerPixel;
 			setPixel(x, y, pixelLight);
 		}
 	}

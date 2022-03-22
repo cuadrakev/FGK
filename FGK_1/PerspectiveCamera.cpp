@@ -8,14 +8,14 @@
 
 void PerspectiveCamera::renderScene(Scene *scene)
 {
-	float height = tan(fov/2.);
-	float width = height;
 	float3 llCorner;
 	float3 horizontal;
 	float3 vertical;
 	float3 z;
-	
 	{
+		float height = tan(fov/2.);
+		float width = height * (float(getRenderWidth()) / float(getRenderHeight()));
+		
 		z = this->position - this->target;
 		z = z.Normalize();
 		
@@ -36,13 +36,12 @@ void PerspectiveCamera::renderScene(Scene *scene)
 			LightIntensity pixelLight;
 			LightIntensity currentLight;
 			
-			for(unsigned int rays = 0; rays < 10; rays++)
+			for(unsigned int rays = 0; rays < raysPerPixel; rays++)
 			{
 				currentLight = LightIntensity(0, 0, 0);
 				
 				int horizontalSection = getRenderWidth() / 6;
 				int verticalSection = getRenderHeight() / 6;
-				
 				if(x < horizontalSection or x >= horizontalSection * 3 and x < horizontalSection * 4)
 				{
 					currentLight.add(1., 0., 0.);
@@ -57,12 +56,13 @@ void PerspectiveCamera::renderScene(Scene *scene)
 				{
 					currentLight.add(0., 0., 1.);
 				}
-				
 				currentLight *= float(y) / float(getRenderHeight());
 				
-				float3 pp = llCorner + horizontal * float(x) + horizontal * (drand48() - 0.5) + vertical * y + vertical * (drand48() - 0.5) - this->position;
-				pp = pp.Normalize();
-				Ray ray(this->position, pp);
+				float xx = (x + drand48()) / float(getRenderWidth());
+				float yy = (y + drand48()) / float(getRenderHeight());
+				float3 dst = llCorner + horizontal * xx + vertical * yy - this->position;
+				dst = dst.Normalize();
+				Ray ray(this->position, dst);
 				HitData hit = scene->propagateRay(ray);
 				if(hit.result != HitData::Miss)
 				{
@@ -72,7 +72,7 @@ void PerspectiveCamera::renderScene(Scene *scene)
 				pixelLight = pixelLight + currentLight;
 			}
 			
-			pixelLight = pixelLight / 10.;
+			pixelLight = pixelLight / raysPerPixel;
 			setPixel(x, y, pixelLight);
 		}
 	}

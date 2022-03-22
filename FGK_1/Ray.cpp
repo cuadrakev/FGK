@@ -2,5 +2,5 @@
 
 float3 Ray::operator()(float t)
 {
-    return origin + direction * t;
+	return origin + direction * t;
 }
