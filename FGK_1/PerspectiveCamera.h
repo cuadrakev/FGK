@@ -1,7 +1,9 @@
 #pragma once
 #include "Camera.h"
-class PerspectiveCamera :
-    protected Camera
+
+class Scene;
+
+class PerspectiveCamera: public Camera
 {
 private:
 
@@ -9,7 +11,7 @@ private:
 
 public:
 
-    PerspectiveCamera(float3 position, float3 target, float FOV): Camera(0, 0, position, target)
+    PerspectiveCamera(unsigned int widht, unsigned int height, float3 position, float3 target, float FOV): Camera(widht, height, position, target)
     {
         fov = FOV;
     }
@@ -17,6 +19,7 @@ public:
     inline float getFOV() { return fov; }
 
     inline void setFOV(float f) { fov = f; }
-
+    
+    void renderScene(Scene *scene) override;
 };
 

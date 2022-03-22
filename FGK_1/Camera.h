@@ -3,6 +3,8 @@
 
 #include "LightIntensity.h"
 
+class Scene;
+
 class Camera
 {
 public:
@@ -17,7 +19,7 @@ public:
 	unsigned int getRenderWidth() { return renderWidth; }
 	unsigned int getRenderHeight() { return renderHeight; }
 	
-	virtual void renderScene() = 0;
+	virtual void renderScene(Scene *scene) = 0;
 	void getRGBImage(void *data);
 
 protected:

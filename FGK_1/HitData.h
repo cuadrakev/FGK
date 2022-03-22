@@ -17,4 +17,5 @@ struct HitData
 	float distance;
 	float3 hitPoint;
 	float3 normal;
+	float3 color;
 };

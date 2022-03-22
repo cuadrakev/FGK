@@ -1,10 +1,16 @@
 #include "Scene.h"
 
 #include "OrthoCamera.h"
+#include "PerspectiveCamera.h"
+#include "Primitive.h"
+#include "HitData.h"
+#include "Ray.h"
 
-Scene::Scene(unsigned int imageWidth, unsigned int imageHeight):camera(nullptr)
+Scene::Scene(unsigned int imageWidth, unsigned int imageHeight):
+	camera(nullptr)
 {
-	camera = new OrthoCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, 1));
+	//camera = new OrthoCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1));
+	camera = new PerspectiveCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1.), 90.);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -40,6 +46,32 @@ void Scene::sdlTeardown()
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
+void Scene::addPrimitive(Primitive *obj)
+{
+	sceneObjects.push_back(obj);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+HitData Scene::propagateRay(Ray &ray)
+{
+	float maxT = 999;
+	
+	HitData currentHit;
+	HitData closestHit{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	for(auto &x: sceneObjects)
+	{
+		currentHit = x->intersects(ray, maxT);
+		if(currentHit.result == HitData::Hit and currentHit.distance < maxT)
+		{
+			maxT = currentHit.distance;
+			closestHit = currentHit;
+		}
+	}
+	
+	return closestHit;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
 void Scene::mainLoop()
 {
 	sdlInitialize();
@@ -47,22 +79,25 @@ void Scene::mainLoop()
 	void *renderTexturePixels;
 	int renderTexturePitch;
 	
+	camera->renderScene(this);
+	
+	SDL_LockTexture(renderTexture, nullptr, &renderTexturePixels, &renderTexturePitch);
+	camera->getRGBImage(renderTexturePixels);
+	SDL_UnlockTexture(renderTexture);
+
 	quitRequest = false;
 	SDL_Event event;
 	while(!quitRequest)
 	{
-		if(SDL_PollEvent(&event))
+		while(SDL_PollEvent(&event))
 		{
 			if(event.type == SDL_QUIT)
+			{
 				quitRequest = true;
+				break;
+			}
 		}
 		
-		camera->renderScene();
-		
-		SDL_LockTexture(renderTexture, nullptr, &renderTexturePixels, &renderTexturePitch);
-		camera->getRGBImage(renderTexturePixels);
-		SDL_UnlockTexture(renderTexture);
-
 		SDL_RenderClear(sdlRenderer);
 		SDL_RenderCopy(sdlRenderer, renderTexture, nullptr, nullptr);
 		SDL_RenderPresent(sdlRenderer);

@@ -12,7 +12,7 @@ Plane::Plane(float3 normal, float d):normal(normal), d(d)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Plane::intersects(Ray &ray)
+HitData Plane::intersects(Ray &ray, float maxT)
 {
 	HitData hitData{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
 	
@@ -21,7 +21,7 @@ HitData Plane::intersects(Ray &ray)
 	if(N_dot_dir != 0)
 	{
 		float t = (d - normal.DotProduct(ray.getOrigin())) / N_dot_dir;
-		if(t > 0)
+		if(t > 0 and t < maxT)
 		{
 			hitData.distance = t;
 			hitData.result = HitData::Hit;

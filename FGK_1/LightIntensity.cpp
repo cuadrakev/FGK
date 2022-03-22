@@ -2,6 +2,7 @@
 
 void LightIntensity::trim()
 {
+    return;
 	if (r < 0)
 		r = 0;
 	else if (r > 1)
@@ -33,7 +34,7 @@ LightIntensity LightIntensity::operator+(LightIntensity& li)
 	B = b + li.b;
 
 	LightIntensity newLI(R,G,B);
-	newLI.trim();
+	//newLI.trim();
 
 	return newLI;
 }
@@ -73,7 +74,7 @@ LightIntensity LightIntensity::operator/(float num)
 	B = b * inv;
 
 	LightIntensity newLI(R,G,B);
-	newLI.trim();
+	//newLI.trim();
 
 	return newLI;
 }

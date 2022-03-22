@@ -8,6 +8,6 @@ public:
 	OrthoCamera(unsigned int imageWidth, unsigned int imageHeight, float3 position, float3 target):
 		Camera(imageWidth, imageHeight, position, target) {}
 	
-	void renderScene() override;
+	void renderScene(Scene *scene) override;
 };
 
