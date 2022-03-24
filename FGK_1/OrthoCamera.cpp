@@ -1,6 +1,7 @@
 #include "OrthoCamera.h"
 
 #include <cstdlib>
+#include <random>
 
 #include "Scene.h"
 #include "Ray.h"
@@ -11,6 +12,10 @@
 
 void OrthoCamera::renderScene(Scene *scene)
 {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+
 	float3 llCorner;
 	float3 horizontal;
 	float3 vertical;
@@ -61,8 +66,8 @@ void OrthoCamera::renderScene(Scene *scene)
 				}
 				currentLight *= float(y) / float(getRenderHeight());
 				
-				float xx = (x + drand48()) / float(getRenderWidth());
-				float yy = (y + drand48()) / float(getRenderHeight());
+				float xx = (x + dis(gen)) / float(getRenderWidth());
+				float yy = (y + dis(gen)) / float(getRenderHeight());
 				float3 org = llCorner + horizontal * xx + vertical * yy;
 				Ray ray(org, float3(0, 0, 0) - z);
 				HitData hit = scene->propagateRay(ray);

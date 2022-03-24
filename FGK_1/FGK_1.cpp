@@ -6,7 +6,7 @@
 #include "float4x4.h"
 #include "Scene.h"
 
-int main()
+int main(int argv, char** args)
 {
 	Sphere s(float3(0, 0, -0.7), 0.25);
 	s.color = float3(1., 0., 0.);
