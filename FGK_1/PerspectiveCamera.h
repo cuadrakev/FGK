@@ -11,8 +11,8 @@ private:
 
 public:
 
-	PerspectiveCamera(unsigned int widht, unsigned int height, float3 position, float3 target, float FOV):
-		Camera(widht, height, position, target)
+	PerspectiveCamera(unsigned int width, unsigned int height, float3 position, float3 target, float FOV):
+		Camera(width, height, position, target)
 	{
 		fov = FOV;
 	}

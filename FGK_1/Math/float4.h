@@ -7,6 +7,7 @@ class float4
 public:
 
 	float x, y, z, w;
+	const int LENGTH = 4;
 	float4();
 	float4(float x, float y, float z, float w = 1);
 	float4(float3 v, float w = 1);
@@ -15,6 +16,7 @@ public:
 	float Length();
 	float3 ToFloat3();
 	void perspectiveDiv();
+	void saturate();
 	//float4 Normalize();
 	//inline float4 Opposite();
 	//float3 Projection(float3 v);
@@ -33,12 +35,24 @@ public:
 		y += v.y;
 		z += v.z;
 		w += v.w;
+
+		return (*this);
 	}
 	inline float4 operator -= (float4 const& v) {
 		x -= v.x;
 		y -= v.y;
 		z -= v.z;
 		w -= v.w;
+
+		return (*this);
+	}
+	inline float4 operator *= (float4 const& v) {
+		x *= v.x;
+		y *= v.y;
+		z *= v.z;
+		w *= v.w;
+
+		return (*this);
 	}
 	inline float4 operator * (float4 const& v) {
 		return float4(v.x * x, v.y * y, v.z * z, w * v.w);
@@ -49,6 +63,14 @@ public:
 	inline float4 operator / (float const& s) {
 		float inv = 1.0f / s;
 		return float4(inv * x, inv * y, inv * z, inv * w);
+	}
+	inline float4 operator = (float4 const& v) {
+		x = v.x;
+		y = v.y;
+		z = v.z;
+		w = v.w;
+
+		return (*this);
 	}
 
 	std::string ToString();

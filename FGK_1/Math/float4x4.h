@@ -48,6 +48,8 @@ public:
 
 	float operator()(int r, int c);
 
+	float4 operator[](int c);
+
 	float4x4 operator+(float4x4 M);
 
 	float4x4 operator*(float4x4 M);
@@ -56,11 +58,13 @@ public:
 
 	float4 operator*(float4 v);
 
-	void operator+=(float4x4 M);
+	float3 operator*(float3 v);
 
-	void operator*=(float4x4 M);
+	float4x4 operator+=(float4x4 M);
 
-	void operator*=(float s);
+	float4x4 operator*=(float4x4 M);
+
+	float4x4 operator*=(float s);
 
 	std::string ToString();
 };

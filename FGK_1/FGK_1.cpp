@@ -1,9 +1,8 @@
 ﻿#include <iostream>
 
-#include "float3.h"
 #include "Sphere.h"
 #include "Plane.h"
-#include "float4x4.h"
+#include "Math/float4x4.h"
 #include "Scene.h"
 
 int main(int argv, char** args)

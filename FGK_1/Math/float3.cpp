@@ -1,5 +1,7 @@
 #include "float3.h"
 
+const float epsilon = 0.0001;
+
 float3::float3()
 {
 	x = 0;
@@ -49,7 +51,7 @@ float float3::Length()
 float3 float3::Normalize()
 {
 	float l = Length();
-	if(l > 0)
+	if(l > epsilon)
 		return float3(x/l, y/l, z/l);
 	return float3(); // should be exception
 }
@@ -82,6 +84,24 @@ float3 float3::Lerp(float3 v, float t)
 	Y = y + t * (v.y - y);
 	Z = z + t * (v.z - z);
 	return float3(X, Y, Z);
+}
+
+void float3::saturate()
+{
+	if (x < 0)
+		x = 0;
+	else if (x > 1)
+		x = 1;
+
+	if (y < 0)
+		y = 0;
+	else if (y > 1)
+		y = 1;
+
+	if (z < 0)
+		z = 0;
+	else if (z > 1)
+		z = 1;
 }
 
 std::string float3::ToString()

@@ -1,5 +1,5 @@
 #pragma once
-#include "float3.h"
+#include "Math/float3.h"
 
 #include "LightIntensity.h"
 

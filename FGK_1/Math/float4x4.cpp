@@ -189,6 +189,11 @@ float float4x4::operator()(int r, int c)
 	return entry[r][c];
 }
 
+float4 float4x4::operator[](int c)
+{
+	return getColumn(c);
+}
+
 float4x4 float4x4::operator+(float4x4 M)
 {
 	float entr[ROWS][COLS];
@@ -243,14 +248,25 @@ float4 float4x4::operator*(float4 v)
 	return result;
 }
 
-void float4x4::operator+=(float4x4 M)
+float3 float4x4::operator*(float3 v)
+{
+	float4 ext = float4(v);
+
+	float4 result = (*this)*ext;
+
+	return result.ToFloat3();
+}
+
+float4x4 float4x4::operator+=(float4x4 M)
 {
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
 			entry[r][c] += M(r, c);
+
+	return (*this);
 }
 
-void float4x4::operator*=(float4x4 M)
+float4x4 float4x4::operator*=(float4x4 M)
 {
 	float4 rowVectors[ROWS];
 	float4 colVectors[COLS];
@@ -264,13 +280,17 @@ void float4x4::operator*=(float4x4 M)
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
 			entry[r][c] = rowVectors[r].DotProduct(colVectors[c]);
+
+	return (*this);
 }
 
-void float4x4::operator*=(float s)
+float4x4 float4x4::operator*=(float s)
 {
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
 			entry[r][c] *= s;
+
+	return (*this);
 }
 
 std::string float4x4::ToString()

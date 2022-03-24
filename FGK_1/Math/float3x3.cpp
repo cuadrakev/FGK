@@ -164,6 +164,11 @@ float float3x3::operator()(int r, int c)
 	return entry[r][c];
 }
 
+float3 float3x3::operator[](int c)
+{
+	return getColumn(c);
+}
+
 float3x3 float3x3::operator+(float3x3 M)
 {
 	float entr[ROWS][COLS];
@@ -218,14 +223,16 @@ float3 float3x3::operator*(float3 v)
 	return result;
 }
 
-void float3x3::operator+=(float3x3 M)
+float3x3 float3x3::operator+=(float3x3 M)
 {
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
 			entry[r][c] += M(r, c);
+
+	return (*this);
 }
 
-void float3x3::operator*=(float3x3 M)
+float3x3 float3x3::operator*=(float3x3 M)
 {
 	float3 rowVectors[ROWS];
 	float3 colVectors[COLS];
@@ -239,13 +246,17 @@ void float3x3::operator*=(float3x3 M)
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
 			entry[r][c] = rowVectors[r].DotProduct(colVectors[c]);
+
+	return (*this);
 }
 
-void float3x3::operator*=(float s)
+float3x3 float3x3::operator*=(float s)
 {
 	for (int r = 0; r < ROWS; r++)
 		for (int c = 0; c < COLS; c++)
 			entry[r][c] *= s;
+
+	return (*this);
 }
 
 std::string float3x3::ToString()

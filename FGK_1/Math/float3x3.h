@@ -43,6 +43,8 @@ public:
 
 	float operator()(int r, int c);
 
+	float3 operator[](int c);
+
 	float3x3 operator+(float3x3 M);
 
 	float3x3 operator*(float3x3 M);
@@ -51,11 +53,11 @@ public:
 
 	float3 operator*(float3 v);
 
-	void operator+=(float3x3 M);
+	float3x3 operator+=(float3x3 M);
 
-	void operator*=(float3x3 M);
+	float3x3 operator*=(float3x3 M);
 
-	void operator*=(float s);
+	float3x3 operator*=(float s);
 
 	std::string ToString();
 };

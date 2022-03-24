@@ -19,15 +19,15 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 {
 	HitData hitData{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
 
-	float3 v = ray.getOrigin() - center;
-	float b = -ray.getDirection().DotProduct(v);
-	float delta = b * b - v.DotProduct(v) + radius * radius;
+	float3 hypo = ray.getOrigin() - center;
+	float adj = -ray.getDirection().DotProduct(hypo);
+	float delta = adj * adj - hypo.DotProduct(hypo) + radius * radius;
 	
 	if(delta == 0)
 	{
-		if(b > 0 and b < maxT)
+		if(adj > 0 and adj < maxT)
 		{
-			hitData.distance = b;
+			hitData.distance = adj;
 			hitData.result = HitData::Tangent;
 			hitData.hitPoint = ray(hitData.distance);
 			hitData.normal = (hitData.hitPoint - center) / radius;
@@ -37,8 +37,8 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 	else if(delta > 0)
 	{
 		delta = sqrt(delta);
-		float t1 = b - delta;
-		float t2 = b + delta;
+		float t1 = adj - delta;
+		float t2 = adj + delta;
 		
 		if(t2 > 0)
 		{
