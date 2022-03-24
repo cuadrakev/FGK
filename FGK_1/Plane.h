@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Primitive.h"
-#include "Vector.h"
+#include "float3.h"
 #include "Ray.h"
 #include "HitData.h"
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vector.h"
+#include "float3.h"
 
 
 struct HitData

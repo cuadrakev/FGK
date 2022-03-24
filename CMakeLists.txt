@@ -12,6 +12,7 @@ include_directories("include/" ${SDL2_INCLUDE_DIRS})
 
 set(SOURCE_FILES "FGK_1/FGK_1.cpp"
                  "FGK_1/Camera.cpp"
+                 "FGK_1/float3.cpp"
                  "FGK_1/float3x3.cpp"
                  "FGK_1/float4.cpp"
                  "FGK_1/float4x4.cpp"
@@ -22,8 +23,7 @@ set(SOURCE_FILES "FGK_1/FGK_1.cpp"
                  "FGK_1/Point.cpp"
                  "FGK_1/Ray.cpp"
                  "FGK_1/Scene.cpp"
-                 "FGK_1/Sphere.cpp"
-                 "FGK_1/Vector.cpp")
+                 "FGK_1/Sphere.cpp")
 
 add_executable(FGK ${SOURCE_FILES})
 target_link_libraries(FGK PUBLIC ${SDL2_LIBRARIES})
