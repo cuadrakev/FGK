@@ -21,6 +21,8 @@ public:
 
 	float3x3(float entries[][COLS]);
 
+	//float3x3(float3 columns[COLS]);
+
 	static float3x3 identity3x3();
 
 	float3x3 transpose();
