@@ -15,14 +15,16 @@ void OrthoCamera::renderScene(Scene *scene)
 	std::random_device rd;
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(0.0, 1.0);
+	
+	float3 lightDir(0., 0.7071067811, 0.7071067811);
 
 	float3 llCorner;
 	float3 horizontal;
 	float3 vertical;
 	float3 z;
 	{
-		float height = 1.;
-		float width = float(getRenderWidth()) / float(getRenderHeight());
+		float height = 2.;
+		float width = float(getRenderWidth()) / float(getRenderHeight()) * 2.;
 		
 		z = this->position - this->target;
 		z = z.Normalize();
@@ -73,7 +75,8 @@ void OrthoCamera::renderScene(Scene *scene)
 				HitData hit = scene->propagateRay(ray);
 				if(hit.result != HitData::Miss)
 				{
-					currentLight = LightIntensity(hit.color.x, hit.color.y, hit.color.z);
+					currentLight = LightIntensity(hit.color.x, hit.color.y, hit.color.z) *
+								   lightDir.DotProduct(hit.normal);
 				}
 				
 				pixelLight = pixelLight + currentLight;

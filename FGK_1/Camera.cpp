@@ -31,12 +31,12 @@ Camera::~Camera()
 
 void Camera::setPixel(unsigned int x, unsigned int y, LightIntensity &light)
 {
-	image[x + y * renderWidth] = light;
+	image[x + (renderHeight - y - 1) * renderWidth] = light;
 }
 
 LightIntensity Camera::getPixel(unsigned int x, unsigned int y)
 {
-	return image[x + y * renderWidth];
+	return image[x + (renderHeight - y - 1) * renderWidth];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

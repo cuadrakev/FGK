@@ -5,7 +5,7 @@ float3 Triangle::calculateNormal()
 	float3 AB = float3(vertex[0], vertex[1]);
 	float3 AC = float3(vertex[0], vertex[2]);
 
-	float3 nor = AC.CrossProduct(AB); // left hand rule
+	float3 nor = AB.CrossProduct(AC); // left hand rule
 
 	nor = nor.Normalize();
 
@@ -19,6 +19,30 @@ Triangle::Triangle(float3 A, float3 B, float3 C)
 	vertex[2] = C;
 	normal = calculateNormal();
 	//if(normal.LengthSquared() < 0.000001) handle degenerate triangle
+}
+
+Triangle::Triangle(Triangle const &t)
+{
+	vertex[0] = t.vertex[0];
+	vertex[1] = t.vertex[1];
+	vertex[2] = t.vertex[2];
+	A = vertex[0];
+	B = vertex[1];
+	C = vertex[2];
+	normal = t.normal;
+}
+
+Triangle &Triangle::operator=(Triangle const &t)
+{
+	vertex[0] = t.vertex[0];
+	vertex[1] = t.vertex[1];
+	vertex[2] = t.vertex[2];
+	A = vertex[0];
+	B = vertex[1];
+	C = vertex[2];
+	normal = t.normal;
+	
+	return *this;
 }
 
 HitData Triangle::intersects(Ray& ray, float maxT)
@@ -45,9 +69,9 @@ HitData Triangle::intersects(Ray& ray, float maxT)
 		//}
 
 		// method 2 - Moller Trumbore
-		float3 AB = float3(A, B);
-		float3 AC = float3(A, C);
-		float3 AO = float3(A, ray.getOrigin());
+		float3 AB = float3(B, A);
+		float3 AC = float3(C, A);
+		float3 AO = float3(ray.getOrigin(), A);
 
 		float3x3 M(AB, AC, ray.getDirection());
 		float3x3 Mb(AO, AC, ray.getDirection());

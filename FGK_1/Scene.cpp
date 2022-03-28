@@ -9,8 +9,8 @@
 Scene::Scene(unsigned int imageWidth, unsigned int imageHeight):
 	camera(nullptr)
 {
-	camera = new OrthoCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1));
-	//camera = new PerspectiveCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1.), 3.14159265 / 2.);
+	//camera = new OrthoCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1));
+	camera = new PerspectiveCamera(imageWidth, imageHeight, float3(0, 0, 2.0), float3(0, 0, -1.), 3.14159265 / 2.);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -79,7 +79,9 @@ void Scene::mainLoop()
 	void *renderTexturePixels;
 	int renderTexturePitch;
 	
+	unsigned int startTime = SDL_GetTicks();
 	camera->renderScene(this);
+	std::cout<<"Render time: "<<SDL_GetTicks() - startTime<<"ms"<<std::endl;
 	
 	SDL_LockTexture(renderTexture, nullptr, &renderTexturePixels, &renderTexturePitch);
 	camera->getRGBImage(renderTexturePixels);

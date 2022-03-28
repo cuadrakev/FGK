@@ -10,21 +10,7 @@ find_package(SDL2 REQUIRED)
 
 include_directories("include/" ${SDL2_INCLUDE_DIRS})
 
-set(SOURCE_FILES "FGK_1/FGK_1.cpp"
-                 "FGK_1/Camera.cpp"
-                 "FGK_1/Math/float3.cpp"
-                 "FGK_1/Math/float3x3.cpp"
-                 "FGK_1/Math/float4.cpp"
-                 "FGK_1/Math/float4x4.cpp"
-                 "FGK_1/Math/int3.cpp"
-                 "FGK_1/LightIntensity.cpp"
-                 "FGK_1/OrthoCamera.cpp"
-                 "FGK_1/PerspectiveCamera.cpp"
-                 "FGK_1/Plane.cpp"
-                 "FGK_1/Point.cpp"
-                 "FGK_1/Ray.cpp"
-                 "FGK_1/Scene.cpp"
-                 "FGK_1/Sphere.cpp")
+file(GLOB_RECURSE SOURCE_FILES "./FGK_1/*.cpp" "./FGK_1/Math/*.cpp")
 
 add_executable(FGK ${SOURCE_FILES})
 target_link_libraries(FGK PUBLIC ${SDL2_LIBRARIES})

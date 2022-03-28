@@ -23,6 +23,10 @@ public:
 	float3 color;
 
 	Triangle(float3 A, float3 B, float3 C);
+	Triangle(Triangle const &t);
+	Triangle &operator=(Triangle const &t);
+	
+	const float3 getPoint(int index) { return vertex[index]; }
 
 	HitData intersects(Ray& ray, float maxT) override;
 
