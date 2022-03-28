@@ -11,7 +11,7 @@ int main(int argv, char** args)
 	//s.color = float3(1., 0., 0.);
 	//Sphere s2(float3(0.2, 0, -0.6), 0.10);
 	//s2.color = float3(0., 1., 1.);
-	Triangle t1(float3(-0.3, 0.0, 0.0), float3(0, -0.2, 0), float3(0.1, 0.4, 0.0));
+	Triangle t1(float3(-0.3, 0.0, -0.3), float3(0, -0.2, -0.7), float3(0.1, 0.4, -0.7));
 	t1.color = float3(0., 1., 0.);
 
 	Scene scene(1024, 640);

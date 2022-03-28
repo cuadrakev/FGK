@@ -8,8 +8,11 @@ private:
 
 public:
 
-	// dunno how to union :c
-	float x, y, z;
+	union {
+		struct { float x, y, z; };
+		struct { float r, g, b; };
+		float comp[3];
+	};
 	const int LENGTH = 3;
 	float3();
 	float3(float x, float y, float z);
@@ -72,6 +75,8 @@ public:
 
 		return (*this);
 	}
+
+	float operator[](int ind);
 
 	std::string ToString();
 

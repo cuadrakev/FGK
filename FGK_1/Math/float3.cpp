@@ -22,9 +22,13 @@ float3::float3(float3 p1, float3 p2)
 
 float float3::DotProduct(float3 v)
 {
-	return x * v.x +
-			y * v.y +
-			z * v.z;
+	float dp = 0;
+	for (int i = 0; i < LENGTH; i++)
+	{
+		dp += comp[i] * v.comp[i];
+	}
+
+	return dp;
 }
 
 float3 float3::CrossProduct(float3 v)
@@ -40,6 +44,13 @@ float3 float3::CrossProduct(float3 v)
 
 float float3::LengthSquared()
 {
+	//float ls = 0;
+	//for (int i = 0; i < LENGTH; i++)
+	//{
+	//	ls += comp[i] * comp[i];
+	//}
+
+	//return ls;
 	return x * x + y * y + z * z;
 }
 
@@ -51,13 +62,31 @@ float float3::Length()
 float3 float3::Normalize()
 {
 	float l = Length();
-	if(l > epsilon)
-		return float3(x/l, y/l, z/l);
+	if (l > epsilon)
+	{
+		//float3 op;
+
+		//for (int i = 0; i < LENGTH; i++)
+		//{
+		//	op.comp[i] = comp[i]/l;
+		//}
+
+		//return op;
+		return float3(x / l, y / l, z / l);
+	}
 	return float3(); // should be exception
 }
 
 float3 float3::Opposite()
 {
+	//float3 op;
+
+	//for (int i = 0; i < LENGTH; i++)
+	//{
+	//	op.comp[i] = -comp[i];
+	//}
+
+	//return op;
 	return float3(-x, -y, -z);
 }
 
@@ -88,20 +117,18 @@ float3 float3::Lerp(float3 v, float t)
 
 void float3::saturate()
 {
-	if (x < 0)
-		x = 0;
-	else if (x > 1)
-		x = 1;
+	for (int i = 0; i < LENGTH; i++)
+	{
+		if (comp[i] < 0)
+			comp[i] = 0;
+		else if (comp[i] > 1)
+			comp[i] = 1;
+	}
+}
 
-	if (y < 0)
-		y = 0;
-	else if (y > 1)
-		y = 1;
-
-	if (z < 0)
-		z = 0;
-	else if (z > 1)
-		z = 1;
+float float3::operator[](int ind)
+{
+	return comp[ind];
 }
 
 std::string float3::ToString()

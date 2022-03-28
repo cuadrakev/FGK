@@ -21,14 +21,24 @@ float4::float4(float3 v, float w): w(w)
 
 float float4::DotProduct(float4 v)
 {
-	return x * v.x +
-		y * v.y +
-		z * v.z +
-		w * v.w;
+	float dp = 0;
+	for (int i = 0; i < LENGTH; i++)
+	{
+		dp += comp[i] * v.comp[i];
+	}
+
+	return dp;
 }
 
 float float4::LengthSquared()
 {
+	//float ls = 0;
+	//for (int i = 0; i < LENGTH; i++)
+	//{
+	//	ls += comp[i] * comp[i];
+	//}
+
+	//return ls;
 	return x * x + y * y + z * z + w * w;
 }
 
@@ -56,20 +66,18 @@ void float4::perspectiveDiv()
 
 void float4::saturate()
 {
-	if (x < 0)
-		x = 0;
-	else if (x > 1)
-		x = 1;
+	for (int i = 0; i < LENGTH; i++)
+	{
+		if (comp[i] < 0)
+			comp[i] = 0;
+		else if (comp[i] > 1)
+			comp[i] = 1;
+	}
+}
 
-	if (y < 0)
-		y = 0;
-	else if (y > 1)
-		y = 1;
-
-	if (z < 0)
-		z = 0;
-	else if (z > 1)
-		z = 1;
+float float4::operator[](int ind)
+{
+	return comp[ind];
 }
 
 std::string float4::ToString()

@@ -6,7 +6,11 @@ class float4
 
 public:
 
-	float x, y, z, w;
+	union {
+		struct { float x, y, z, w; };
+		struct { float r, g, b, a; };
+		float comp[4];
+	};
 	const int LENGTH = 4;
 	float4();
 	float4(float x, float y, float z, float w = 1);
@@ -72,6 +76,8 @@ public:
 
 		return (*this);
 	}
+
+	float operator[](int ind);
 
 	std::string ToString();
 };
