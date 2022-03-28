@@ -69,6 +69,8 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles)
 {
 	std::ifstream file;
 	file.open(filename);
+	if (!file)
+		return;
 //temporary vectors
 	std::vector<float3> vertexPosition;
 	std::vector<float3> uvPosition;// where float2?
