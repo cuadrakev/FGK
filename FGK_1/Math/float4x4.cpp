@@ -87,6 +87,17 @@ float4x4::float4x4(float3x3 M)
 	}
 }
 
+float4x4::float4x4(float4 columns[COLS])
+{
+	for (int r = 0; r < ROWS; r++)
+	{
+		for (int c = 0; c < COLS; c++)
+		{
+			entry[r][c] = columns[c].comp[r];
+		}
+	}
+}
+
 float4x4 float4x4::identity4x4()
 {
 	float entr[ROWS][COLS];

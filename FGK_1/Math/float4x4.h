@@ -24,6 +24,8 @@ public:
 
 	float4x4(float3x3 M);
 
+	float4x4(float4 columns[COLS]);
+
 	float3x3 subMatrix(int R, int C);
 
 	static float4x4 identity4x4();

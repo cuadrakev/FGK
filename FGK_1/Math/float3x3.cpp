@@ -63,6 +63,27 @@ float3x3::float3x3(float entries[][COLS])
 	}
 }
 
+float3x3::float3x3(float3 columns[COLS])
+{
+	for (int r = 0; r < ROWS; r++)
+	{
+		for (int c = 0; c < COLS; c++)
+		{
+			entry[r][c] = columns[c].comp[r];
+		}
+	}
+}
+
+float3x3::float3x3(float3 v, float3 u, float3 w)
+{
+	for (int r = 0; r < ROWS; r++)
+	{
+		entry[r][0] = v.comp[r];
+		entry[r][1] = u.comp[r];
+		entry[r][2] = w.comp[r];
+	}
+}
+
 float3x3 float3x3::identity3x3()
 {
 	float entr[ROWS][COLS];
@@ -92,11 +113,23 @@ float3 float3x3::getRow(int r)
 	return float3(); // should throw exception
 }
 
+void float3x3::setRow(int i, float3 r)
+{
+	for (int c = 0; c < COLS; c++)
+		entry[i][c] = r[c];
+}
+
 float3 float3x3::getColumn(int c)
 {
 	if (0 <= c && c < COLS)
 		return float3(entry[0][c], entry[1][c], entry[2][c]);
 	return float3(); // should throw exception
+}
+
+void float3x3::setColumn(int i, float3 c)
+{
+	for (int r = 0; r < ROWS; r++)
+			entry[r][i] = c[r];
 }
 
 float float3x3::getDeterminant()

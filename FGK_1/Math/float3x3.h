@@ -21,7 +21,9 @@ public:
 
 	float3x3(float entries[][COLS]);
 
-	//float3x3(float3 columns[COLS]);
+	float3x3(float3 columns[COLS]);
+
+	float3x3(float3 v, float3 u, float3 w);
 
 	static float3x3 identity3x3();
 
@@ -29,7 +31,11 @@ public:
 
 	float3 getRow(int r);
 
+	void setRow(int i, float3 r);
+
 	float3 getColumn(int c);
+
+	void setColumn(int i, float3 c);
 
 	float getDeterminant();
 

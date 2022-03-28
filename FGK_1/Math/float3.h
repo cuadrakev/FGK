@@ -22,7 +22,7 @@ public:
 	float LengthSquared();
 	float Length();
 	float3 Normalize();
-	inline float3 Opposite();
+	float3 Opposite();
 	float3 Projection(float3 v);
 	float3 Orthogonal(float3 v);
 	float3 Reflect(float3 normal);

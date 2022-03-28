@@ -2,10 +2,10 @@
 
 float3 Triangle::calculateNormal()
 {
-	float3 BA = float3(vertex[0], vertex[1]);
-	float3 CA = float3(vertex[0], vertex[2]);
+	float3 AB = float3(vertex[0], vertex[1]);
+	float3 AC = float3(vertex[0], vertex[2]);
 
-	float3 nor = CA.CrossProduct(BA); // left hand rule
+	float3 nor = AC.CrossProduct(AB); // left hand rule
 
 	nor = nor.Normalize();
 
@@ -29,17 +29,51 @@ HitData Triangle::intersects(Ray& ray, float maxT)
 
 	if (!mathlib::isZero(N_dot_dir))
 	{
-		float t = (vertex[0].Length() - normal.DotProduct(ray.getOrigin())) / N_dot_dir;
-		if (t > 0 and t < maxT)
+		//// method 1 - angles
+		//float t = (vertex[0].Length() - normal.DotProduct(ray.getOrigin())) / N_dot_dir;
+		//if (t > 0 and t < maxT)
+		//{
+		//	float3 crossPoint = ray(t);
+		//	if (pointInTriangle(crossPoint))
+		//	{
+		//		hitData.distance = t;
+		//		hitData.result = HitData::Hit;
+		//		hitData.hitPoint = crossPoint;
+		//		hitData.normal = normal;
+		//		hitData.color = color;
+		//	}
+		//}
+
+		// method 2 - Moller Trumbore
+		float3 AB = float3(A, B);
+		float3 AC = float3(A, C);
+		float3 AO = float3(A, ray.getOrigin());
+
+		float3x3 M(AB, AC, ray.getDirection());
+		float3x3 Mb(AO, AC, ray.getDirection());
+		float3x3 Mg(AB, AO, ray.getDirection());
+		float3x3 Mt(AB, AC, AO);
+
+		float Mdet = M.getDeterminant();
+
+		if (!mathlib::isZero(Mdet))
 		{
-			float3 crossPoint = ray(t);
-			if (pointInTriangle(crossPoint))
+			float beta = Mb.getDeterminant() / Mdet;
+			float gamma = Mg.getDeterminant() / Mdet;
+			if (beta > mathlib::MINUS_ZERO && 
+				gamma > mathlib::MINUS_ZERO && 
+				beta + gamma <= 1 + mathlib::PLUS_ZERO)
 			{
-				hitData.distance = t;
-				hitData.result = HitData::Hit;
-				hitData.hitPoint = crossPoint;
-				hitData.normal = normal;
-				hitData.color = color;
+				float t = Mt.getDeterminant() / Mdet;
+
+				if (t > 0 and t < maxT)
+				{
+					hitData.distance = t;
+					hitData.result = HitData::Hit;
+					hitData.hitPoint = ray(t);
+					hitData.normal = normal;
+					hitData.color = color;
+				}
 			}
 		}
 	}
@@ -49,10 +83,9 @@ HitData Triangle::intersects(Ray& ray, float maxT)
 
 bool Triangle::pointInTriangle(float3 p)
 {
-	// method 1 - angles
-	float3 AP = vertex[0] - p;
-	float3 BP = vertex[1] - p;
-	float3 CP = vertex[2] - p;
+	float3 AP = A - p;
+	float3 BP = B - p;
+	float3 CP = C - p;
 
 	float3 BPA = BP.CrossProduct(AP);
 	float3 APC = AP.CrossProduct(CP);
