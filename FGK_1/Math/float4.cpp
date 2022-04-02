@@ -49,12 +49,13 @@ float float4::Length()
 
 float3 float4::ToFloat3()
 {
+	perspectiveDiv();
 	return float3(x, y, z);
 }
 
 void float4::perspectiveDiv()
 {
-	if (w = 0)
+	if (w == 0)
 		return;
 
 	float inv_w = 1.0f / w;

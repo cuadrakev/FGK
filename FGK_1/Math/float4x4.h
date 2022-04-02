@@ -36,6 +36,10 @@ public:
 
 	float4 getColumn(int c);
 
+	void setRow(int i, float4 r);
+
+	void setColumn(int i, float4 c);
+
 	float getDeterminant();
 
 	void multiplyRow(int r, float s);

@@ -134,6 +134,18 @@ float4 float4x4::getColumn(int c)
 	return float4(); // should throw exception
 }
 
+void float4x4::setRow(int i, float4 r)
+{
+	for (int c = 0; c < COLS; c++)
+		entry[i][c] = r[c];
+}
+
+void float4x4::setColumn(int i, float4 c)
+{
+	for (int r = 0; r < ROWS; r++)
+		entry[r][i] = c[r];
+}
+
 float float4x4::getDeterminant()
 {
 	return entry[0][0] * subMatrix(0,0).getDeterminant() -
