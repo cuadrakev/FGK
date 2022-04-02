@@ -1,6 +1,6 @@
 #include "LightIntensity.h"
 
-void LightIntensity::trim()
+void LightIntensity::saturate()
 {
 	if (r < 0)
 		r = 0;
@@ -16,13 +16,29 @@ void LightIntensity::trim()
 		b = 1;
 }
 
+float LightIntensity::operator[](int i)
+{
+	saturate();
+	switch (i)
+	{
+	case 0:
+		return r;
+	case 1:
+		return g;
+	case 2:
+		return b;
+	default:
+		return 0;
+	}
+}
+
 void LightIntensity::add(double R, double G, double B)
 {
 	r += R;
 	g += G;
 	b += B;
 
-	trim();
+	saturate();
 }
 
 LightIntensity LightIntensity::operator+(LightIntensity& li)
@@ -46,7 +62,7 @@ LightIntensity LightIntensity::operator-(LightIntensity& li)
 	B = b - li.b;
 
 	LightIntensity newLI(R,G,B);
-	newLI.trim();
+	newLI.saturate();
 
 	return newLI;
 }
@@ -59,7 +75,7 @@ LightIntensity LightIntensity::operator*(float num)
 	B = b * num;
 
 	LightIntensity newLI(R,G,B);
-	newLI.trim();
+	newLI.saturate();
 
 	return newLI;
 }
@@ -78,34 +94,40 @@ LightIntensity LightIntensity::operator/(float num)
 	return newLI;
 }
 
-void LightIntensity::operator+=(LightIntensity& li)
+LightIntensity LightIntensity::operator+=(LightIntensity& li)
 {
 	r += li.r;
 	g += li.g;
 	b += li.b;
 
-	trim();
+	saturate();
+
+	return (*this);
 }
 
-void LightIntensity::operator-=(LightIntensity& li)
+LightIntensity LightIntensity::operator-=(LightIntensity& li)
 {
 	r -= li.r;
 	g -= li.g;
 	b -= li.b;
 
-	trim();
+	saturate();
+
+	return (*this);
 }
 
-void LightIntensity::operator*=(float num)
+LightIntensity LightIntensity::operator*=(float num)
 {
 	r *= num;
 	g *= num;
 	b *= num;
 
-	trim();
+	saturate();
+
+	return (*this);
 }
 
-void LightIntensity::operator/=(float num)
+LightIntensity LightIntensity::operator/=(float num)
 {
 
 	float inverse = 1.0f / num;
@@ -113,7 +135,9 @@ void LightIntensity::operator/=(float num)
 	g *= inverse;
 	b *= inverse;
 
-	trim();
+	saturate();
+
+	return (*this);
 }
 
 LightIntensity operator*(float num, LightIntensity& li)
@@ -124,7 +148,7 @@ LightIntensity operator*(float num, LightIntensity& li)
 	B = li.b * num;
 
 	LightIntensity newLI(R,G,B);
-	newLI.trim();
+	newLI.saturate();
 
 	return newLI;
 }
@@ -137,7 +161,7 @@ LightIntensity operator*(LightIntensity& li, float num)
 	B = li.b * num;
 
 	LightIntensity newLI(R, G, B);
-	newLI.trim();
+	newLI.saturate();
 
 	return newLI;
 }
