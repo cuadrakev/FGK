@@ -142,9 +142,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AreaLight.cpp" />
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="DirectionLight.cpp" />
     <ClCompile Include="FGK_1.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="LightIntensity.cpp" />
+    <ClCompile Include="Material.cpp" />
     <ClCompile Include="Math\float3.cpp" />
     <ClCompile Include="Math\float3x3.cpp" />
     <ClCompile Include="Math\float4.cpp" />
@@ -155,14 +159,20 @@
     <ClCompile Include="PerspectiveCamera.cpp" />
     <ClCompile Include="Plane.cpp" />
     <ClCompile Include="Point.cpp" />
+    <ClCompile Include="PointLight.cpp" />
     <ClCompile Include="Ray.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SpotLight.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AreaLight.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="DirectionLight.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="LightIntensity.h" />
+    <ClInclude Include="Material.h" />
     <ClInclude Include="Math\float3.h" />
     <ClInclude Include="Math\float3x3.h" />
     <ClInclude Include="Math\float4.h" />
@@ -174,10 +184,12 @@
     <ClInclude Include="PerspectiveCamera.h" />
     <ClInclude Include="Plane.h" />
     <ClInclude Include="Point.h" />
+    <ClInclude Include="PointLight.h" />
     <ClInclude Include="Primitive.h" />
     <ClInclude Include="Ray.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SpotLight.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
