@@ -3,6 +3,7 @@
 
 class HitData;
 class Ray;
+class Material;
 
 class Primitive
 {

@@ -177,7 +177,8 @@ HitData Mesh::intersects(Ray& ray, float maxT)
 		if(currentHit.result != HitData::Miss)
 		{
 			closestHit = currentHit;
-			closestHit.color = color;
+			closestHit.material = this->mat.get();
+			closestHit.hitPrimitive = this;
 			minT = currentHit.distance;
 		}
 	}

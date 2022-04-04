@@ -15,7 +15,7 @@ Camera::Camera(unsigned int imageWidth, unsigned int imageHeight, float3 positio
 	farPlane = 1000;
 	up = float3(0, 1, 0);
 	
-	image = new LightIntensity[renderWidth * renderHeight];
+	image = new float3[renderWidth * renderHeight];
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,12 +29,12 @@ Camera::~Camera()
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void Camera::setPixel(unsigned int x, unsigned int y, LightIntensity &light)
+void Camera::setPixel(unsigned int x, unsigned int y, float3 &light)
 {
 	image[x + (renderHeight - y - 1) * renderWidth] = light;
 }
 
-LightIntensity Camera::getPixel(unsigned int x, unsigned int y)
+float3 Camera::getPixel(unsigned int x, unsigned int y)
 {
 	return image[x + (renderHeight - y - 1) * renderWidth];
 }
@@ -49,9 +49,9 @@ void Camera::getRGBImage(void *data)
 		for(unsigned int x = 0; x < renderWidth; x++)
 		{
 			//TODO light normalization
-			surface[x * 3 + y * renderWidth * 3 + 0] = image[x + y * renderWidth].gRed() * 255;
-			surface[x * 3 + y * renderWidth * 3 + 1] = image[x + y * renderWidth].gGreen() * 255;
-			surface[x * 3 + y * renderWidth * 3 + 2] = image[x + y * renderWidth].gBlue() * 255;
+			surface[x * 3 + y * renderWidth * 3 + 0] = image[x + y * renderWidth].x * 255;
+			surface[x * 3 + y * renderWidth * 3 + 1] = image[x + y * renderWidth].y * 255;
+			surface[x * 3 + y * renderWidth * 3 + 2] = image[x + y * renderWidth].z * 255;
 		}
 	}
 }

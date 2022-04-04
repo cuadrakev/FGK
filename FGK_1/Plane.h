@@ -16,7 +16,6 @@ public:
 	
 	float3 getNormal() const { return normal; };
 	
-	float3 color;
 private:
 	
 	float3 normal;

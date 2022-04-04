@@ -52,7 +52,13 @@ void Scene::addPrimitive(Primitive *obj)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Scene::propagateRay(Ray &ray)
+void Scene::addLight(Light *light)
+{
+	sceneLights.push_back(light);
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+HitData Scene::propagateRay(Ray &ray) const
 {
 	float maxT = 999;
 	
@@ -69,6 +75,22 @@ HitData Scene::propagateRay(Ray &ray)
 	}
 	
 	return closestHit;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+HitData Scene::propagateShadowRay(Ray &ray, float maxT) const
+{
+	HitData currentHit{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	for(auto &x: sceneObjects)
+	{
+		currentHit = x->intersects(ray, maxT);
+		if(currentHit.result != HitData::Miss and currentHit.distance < maxT)
+		{
+			break;
+		}
+	}
+	
+	return currentHit;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

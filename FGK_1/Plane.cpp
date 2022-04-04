@@ -27,7 +27,7 @@ HitData Plane::intersects(Ray &ray, float maxT)
 			hitData.result = HitData::Hit;
 			hitData.hitPoint = ray(hitData.distance);
 			hitData.normal = normal;
-			hitData.color = color;
+			hitData.material = mat.get();
 		}
 	}
 	

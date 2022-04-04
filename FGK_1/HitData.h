@@ -2,6 +2,8 @@
 
 #include "Math/float3.h"
 
+class Primitive;
+class Material;
 
 struct HitData
 {
@@ -17,5 +19,6 @@ struct HitData
 	float distance;
 	float3 hitPoint;
 	float3 normal;
-	float3 color;
+	Material *material;
+	Primitive *hitPrimitive;
 };

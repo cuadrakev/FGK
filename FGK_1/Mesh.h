@@ -13,7 +13,6 @@ public:
 	Mesh(std::string filename);
 	
 	HitData intersects(Ray& ray, float maxT) override;
-	float3 color;
 
 private:
 	std::vector<Triangle> triangles;

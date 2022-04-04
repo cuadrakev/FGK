@@ -49,7 +49,7 @@ LightIntensity LightIntensity::operator+(LightIntensity& li)
 	B = b + li.b;
 
 	LightIntensity newLI(R,G,B);
-	//newLI.trim();
+	newLI.saturate();
 
 	return newLI;
 }
@@ -89,7 +89,6 @@ LightIntensity LightIntensity::operator/(float num)
 	B = b * inv;
 
 	LightIntensity newLI(R,G,B);
-	//newLI.trim();
 
 	return newLI;
 }

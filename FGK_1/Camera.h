@@ -30,14 +30,14 @@ protected:
 	float nearPlane;
 	float farPlane;
 	
-	unsigned int raysPerPixel {5};
+	unsigned int raysPerPixel {10};
 	
-	void setPixel(unsigned int x, unsigned int y, LightIntensity &light);
-	LightIntensity getPixel(unsigned int x, unsigned int y);
+	void setPixel(unsigned int x, unsigned int y, float3 &light);
+	float3 getPixel(unsigned int x, unsigned int y);
 	
 private:
 	unsigned int renderWidth;
 	unsigned int renderHeight;
-	LightIntensity *image;
+	float3 *image;
 };
 

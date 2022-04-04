@@ -20,8 +20,6 @@ private:
 
 public:
 
-	float3 color;
-
 	Triangle(float3 A, float3 B, float3 C);
 	Triangle(Triangle const &t);
 	Triangle &operator=(Triangle const &t);

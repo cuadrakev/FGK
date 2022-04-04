@@ -8,6 +8,7 @@ class Camera;
 class Primitive;
 class HitData;
 class Ray;
+class Light;
 
 class Scene
 {
@@ -16,9 +17,14 @@ public:
 	~Scene();
 	
 	void addPrimitive(Primitive *obj);
+	void addLight(Light *light);
 	
-	HitData propagateRay(Ray &ray);
+	HitData propagateRay(Ray &ray) const;
+	HitData propagateShadowRay(Ray &ray, float maxT) const;
 	void mainLoop();
+	
+	const std::list<Primitive*> &getObjects() { return sceneObjects; }
+	const std::list<Light*> &getLights() { return sceneLights; }
 	
 private:
 	void sdlInitialize();
@@ -32,4 +38,5 @@ private:
 	Camera *camera;
 	
 	std::list<Primitive*> sceneObjects;
+	std::list<Light*> sceneLights;
 };

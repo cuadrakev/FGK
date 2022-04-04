@@ -31,7 +31,8 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 			hitData.result = HitData::Tangent;
 			hitData.hitPoint = ray(hitData.distance);
 			hitData.normal = (hitData.hitPoint - center) / radius;
-			hitData.color = color;
+			hitData.material = mat.get();
+			hitData.hitPrimitive = this;
 		}
 	}
 	else if(delta > 0)
@@ -48,7 +49,8 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 				hitData.result = HitData::InHit;
 				hitData.hitPoint = ray(hitData.distance);
 				hitData.normal = (center - hitData.hitPoint) / radius;
-				hitData.color = color;
+				hitData.material = mat.get();
+				hitData.hitPrimitive = this;
 			}
 			else if(t1 > 0 and t1 < maxT)
 			{
@@ -56,7 +58,8 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 				hitData.result = HitData::Hit;
 				hitData.hitPoint = ray(hitData.distance);
 				hitData.normal = (hitData.hitPoint - center) / radius;
-				hitData.color = color;
+				hitData.material = mat.get();
+				hitData.hitPrimitive = this;
 			}
 		}
 	}

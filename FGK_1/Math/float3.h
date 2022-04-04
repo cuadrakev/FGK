@@ -28,6 +28,9 @@ public:
 	float3 Reflect(float3 normal);
 	float3 Lerp(float3 v, float t);
 	void saturate();
+	
+	constexpr float3 operator-()
+	{ return float3(-x, -y, -z); }
 
 	inline float3 operator + (float3 const& v) {
 		return float3(x + v.x, y + v.y, z + v.z);

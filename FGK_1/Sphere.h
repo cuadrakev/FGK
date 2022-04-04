@@ -17,7 +17,6 @@ public:
 	float3 getCenter() const { return center; };
 	float getRadius() const { return radius; };
 	
-	float3 color;
 private:
 	float3 center;
 	float radius;
