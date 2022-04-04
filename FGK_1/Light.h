@@ -4,6 +4,11 @@
 
 class Light
 {
+public:
+	float3 color;
+
+	Light(float3 color) : color(color) {}
+
 	virtual int read(FILE* f) = 0;
 	virtual void write(FILE* f = stdout) = 0;
 
