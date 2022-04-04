@@ -20,7 +20,7 @@ int main(int argv, char** args)
 	m.mat = std::make_shared<Material>(mMat);
 	
 	DirectionLight light(float3(0.2, -1., 0.), float3(1., 1., 1.));
-	PointLight point(float3(1., 1., 1.), float3(1., 1., 1.), 0., 0., 0.);
+	PointLight point(float3(1., 1., 1.), float3(1., 1., 1.), 1., 0., 0.);
 
 	Scene scene(1024, 640);
 	scene.addLight(&light);

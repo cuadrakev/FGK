@@ -7,6 +7,9 @@ class PointLight : public Light
 public:
 	PointLight(float3 _pos, float3 light, float _cAtt, float _lAtt, float _qAtt);
 
+	PointLight(float3 color, float3 pos, float3 att) 
+		: Light(color), position(pos), constAtt(att[0]), linAtt(att[1]), quadAtt(att[2]) {}
+
 	//int read(FILE* f);
 	//void write(FILE* f = stdout);
 
@@ -17,5 +20,7 @@ public:
 private:
 	float3 position;
 	float constAtt, linAtt, quadAtt;
+
+	float attenuationValue(float dist) { return 1.0f / constAtt + linAtt * dist + quadAtt * dist * dist; }
 };
 

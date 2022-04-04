@@ -10,6 +10,8 @@ class Light
 public:
 	//virtual int read(FILE* f) = 0;
 	//virtual void write(FILE* f = stdout) = 0;
+	Light() = default;
+	Light(float3 color) : lightColor(color) {}
 
 	virtual float3 getDiffuse(float3 cameraPos, HitData hData) = 0;
 	virtual float3 getSpecular(float3 cameraPos, HitData hData) = 0;

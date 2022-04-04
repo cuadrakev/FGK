@@ -18,7 +18,7 @@ float3 PointLight::getDiffuse(float3 cameraPos, HitData hData)
 	float LdotN = hData.normal.DotProduct(toLight.Normalize());
 	
 	if(LdotN > 0)
-		return this->lightColor * hData.material->K_d * LdotN;
+		return this->lightColor * hData.material->K_d * LdotN * attenuationValue(dist);
 	else
 		return float3(0., 0., 0.);
 }
@@ -27,13 +27,14 @@ float3 PointLight::getDiffuse(float3 cameraPos, HitData hData)
 float3 PointLight::getSpecular(float3 cameraPos, HitData hData)
 {
 	float3 toLight = position - hData.hitPoint;
+	float dist = toLight.Length();
 	float3 V = float3(cameraPos - hData.hitPoint).Normalize();
 	float3 R = toLight.Normalize();
 	R = R.Reflect(hData.normal);
 	float RdotV = R.DotProduct(V);
 	
 	if(RdotV > 0)
-		return this->lightColor * hData.material->K_s * pow(RdotV, hData.material->N_s);
+		return this->lightColor * hData.material->K_s * pow(RdotV, hData.material->N_s) * attenuationValue(dist);
 	else
 		return float3(0., 0., 0.);
 }
