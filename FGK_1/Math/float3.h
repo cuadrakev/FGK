@@ -15,7 +15,7 @@ public:
 	};
 	const int LENGTH = 3;
 	float3();
-	float3(float x, float y, float z);
+	constexpr float3(float x, float y, float z) : x(x), y(y), z(z) {}
 	float3(float3 p1, float3 p2);
 	float DotProduct(float3 v);
 	float3 CrossProduct(float3 v);

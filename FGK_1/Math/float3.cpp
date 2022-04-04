@@ -9,9 +9,9 @@ float3::float3()
 	z = 0;
 }
 
-float3::float3(float x, float y, float z) : x(x), y(y), z(z)
-{
-}
+//float3::float3(float x, float y, float z) : x(x), y(y), z(z)
+//{
+//}
 
 float3::float3(float3 p1, float3 p2)
 {
