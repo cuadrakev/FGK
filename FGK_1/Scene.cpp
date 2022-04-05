@@ -84,11 +84,13 @@ HitData Scene::propagateShadowRay(Ray &ray, float maxT) const
 	for(auto &x: sceneObjects)
 	{
 		currentHit = x->intersects(ray, maxT);
-		if(currentHit.result != HitData::Miss and currentHit.distance < maxT)
+		if(currentHit.result != HitData::Miss and currentHit.distance < maxT and currentHit.distance > 0.01)
 		{
 			break;
 		}
 	}
+	if(currentHit.distance > maxT or currentHit.distance < 0.001)
+		currentHit.result = HitData::Miss;
 	
 	return currentHit;
 }

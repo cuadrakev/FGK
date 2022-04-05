@@ -56,12 +56,12 @@ void PerspectiveCamera::renderScene(Scene *scene)
 				HitData hit = scene->propagateRay(ray);
 				if(hit.result != HitData::Miss)
 				{
+					currentLight += hit.material->K_a;
 					for(auto light: scene->getLights())
 					{
 						if(!light->isInShadow(hit, hit.hitPrimitive, scene))
 						{
-							float3 color = hit.material->K_a +
-										   light->getDiffuse(this->position, hit) +
+							float3 color = light->getDiffuse(this->position, hit) +
 										   light->getSpecular(this->position, hit);
 							currentLight = color + currentLight;
 						}
