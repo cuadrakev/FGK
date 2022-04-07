@@ -13,9 +13,14 @@ public:
 	Material(float3 amb, float3 spec, float3 diff, float exp, float tran, float3 tranCol, std::string texFilename = "");
 	~Material();
 	
+	bool hasTexture() { return texture != nullptr; }
+	float3 sample2d(float3 pos);
+	float3 sampleSphere(float3 pos);
+	
 private:
 	uint8_t *texture {nullptr};
-	unsigned int textureWidth;
-	unsigned int textureHeight;
+	int textureWidth;
+	int textureHeight;
+	int numberOfChannels;
 };
 

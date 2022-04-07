@@ -12,8 +12,9 @@ class Mesh: public Primitive
 public:
 	Mesh(std::string filename);
 	
-	HitData intersects(Ray& ray, float maxT) override;
-
+	virtual HitData intersects(Ray& ray, float maxT, float minT) override;
+	virtual float3 getNormal(HitData &data) override { return data.hitPrimitive->getNormal(data); }
+	virtual void setMaterial(Material *_mat) override;
 private:
 	std::vector<Triangle> triangles;
 	std::vector<Triangle> boundingBox;

@@ -13,9 +13,9 @@ public:
 	//int read(FILE* f);
 	//void write(FILE* f = stdout);
 
-	virtual float3 getDiffuse(float3 cameraPos, HitData hData) override;
+	virtual float3 getDiffuse(HitData hData) override;
 	virtual float3 getSpecular(float3 cameraPos, HitData hData) override;
-	virtual int isInShadow(HitData hData, Primitive* prim, const Scene *scene) override;
+	virtual int isInShadow(HitData hData, const Scene *scene) override;
 
 private:
 	float3 position;

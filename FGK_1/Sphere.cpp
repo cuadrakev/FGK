@@ -15,9 +15,9 @@ Sphere::Sphere(float3 center, float radius):center(center), radius(radius)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Sphere::intersects(Ray &ray, float maxT)
+HitData Sphere::intersects(Ray &ray, float maxT, float minT)
 {
-	HitData hitData{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	HitData hitData{HitData::Miss};
 
 	float3 hypo = ray.getOrigin() - center;
 	float adj = -ray.getDirection().DotProduct(hypo);
@@ -25,13 +25,11 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 	
 	if(delta == 0)
 	{
-		if(adj > 0 and adj < maxT)
+		if(adj > minT and adj < maxT)
 		{
-			hitData.distance = adj;
 			hitData.result = HitData::Tangent;
-			hitData.hitPoint = ray(hitData.distance);
-			hitData.normal = (hitData.hitPoint - center) / radius;
-			hitData.material = mat.get();
+			hitData.distance = adj;
+			hitData.hitPoint = ray(adj);
 			hitData.hitPrimitive = this;
 		}
 	}
@@ -41,28 +39,39 @@ HitData Sphere::intersects(Ray &ray, float maxT)
 		float t1 = adj - delta;
 		float t2 = adj + delta;
 		
-		if(t2 > 0)
+		if(t2 > minT)
 		{
-			if(t1 < 0 and t2 < maxT)
+			if(t1 < minT and t2 < maxT)
 			{
-				hitData.distance = t2;
 				hitData.result = HitData::InHit;
-				hitData.hitPoint = ray(hitData.distance);
-				hitData.normal = (center - hitData.hitPoint) / radius;
-				hitData.material = mat.get();
+				hitData.distance = t2;
+				hitData.hitPoint = ray(t2);
 				hitData.hitPrimitive = this;
 			}
-			else if(t1 > 0 and t1 < maxT)
+			else if(t1 > minT and t1 < maxT)
 			{
-				hitData.distance = t1;
 				hitData.result = HitData::Hit;
-				hitData.hitPoint = ray(hitData.distance);
-				hitData.normal = (hitData.hitPoint - center) / radius;
-				hitData.material = mat.get();
+				hitData.distance = t1;
+				hitData.hitPoint = ray(t1);
 				hitData.hitPrimitive = this;
 			}
 		}
 	}
 	
 	return hitData;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+inline float3 Sphere::getNormal(HitData &data)
+{
+	switch(data.result)
+	{
+	case HitData::InHit:
+		return (center - data.hitPoint) / radius;
+	case HitData::Hit:
+	case HitData::Tangent:
+		return (data.hitPoint - center) / radius;
+	}
+	
+	return float3(0, 0, 0);
 }

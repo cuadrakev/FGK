@@ -149,10 +149,9 @@ Mesh::Mesh(std::string filename)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Mesh::intersects(Ray& ray, float maxT)
+HitData Mesh::intersects(Ray& ray, float maxT, float minT)
 {
-	float minT = maxT;
-	HitData closestHit {HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	HitData closestHit{HitData::Miss};
 	HitData currentHit;
 	
 	if(boundingBox.size() > 0)
@@ -160,7 +159,7 @@ HitData Mesh::intersects(Ray& ray, float maxT)
 		bool inBox {false};
 		for(auto &x: boundingBox)
 		{
-			currentHit = x.intersects(ray, maxT);
+			currentHit = x.intersects(ray, maxT, minT);
 			if(currentHit.result != HitData::Miss)
 			{
 				inBox = true;
@@ -173,17 +172,22 @@ HitData Mesh::intersects(Ray& ray, float maxT)
 	
 	for(auto &x: triangles)
 	{
-		currentHit = x.intersects(ray, minT);
+		currentHit = x.intersects(ray, maxT, minT);
 		if(currentHit.result != HitData::Miss)
 		{
 			closestHit = currentHit;
-			closestHit.material = this->mat.get();
-			closestHit.hitPrimitive = this;
-			minT = currentHit.distance;
+			maxT = currentHit.distance;
 		}
 	}
 	
 	return closestHit;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Mesh::setMaterial(Material *_mat)
+{
+	for(auto &x: triangles)
+		reinterpret_cast<Primitive*>(&x)->setMaterial(_mat);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

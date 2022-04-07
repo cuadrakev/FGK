@@ -26,8 +26,7 @@ public:
 	
 	const float3 getPoint(int index) { return vertex[index]; }
 
-	HitData intersects(Ray& ray, float maxT) override;
-
-
+	virtual HitData intersects(Ray& ray, float maxT, float minT) override;
+	virtual float3 getNormal(HitData &data) override { return normal; }
 };
 

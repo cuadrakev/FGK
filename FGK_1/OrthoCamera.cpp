@@ -52,17 +52,16 @@ void OrthoCamera::renderScene(Scene *scene)
 				float yy = (y + dis(gen)) / float(getRenderHeight());
 				float3 org = llCorner + horizontal * xx + vertical * yy;
 				Ray ray(org, float3(0, 0, 0) - z);
-				HitData hit = scene->propagateRay(ray);
+				HitData hit = scene->propagateRay(ray, 999, 0);
 				if(hit.result != HitData::Miss)
 				{
+					currentLight += hit.hitPrimitive->getMaterial()->K_a;
 					for(auto light: scene->getLights())
 					{
-						if(light->isInShadow(hit, hit.hitPrimitive, scene))
+						if(light->isInShadow(hit, scene))
 						{
-							float3 color = hit.material->K_a +
-										   light->getDiffuse(org, hit) +
-										   light->getSpecular(org, hit);
-							currentLight += color;
+							currentLight += light->getDiffuse(hit) +
+											light->getSpecular(org, hit);
 						}
 					}
 				}
@@ -71,9 +70,6 @@ void OrthoCamera::renderScene(Scene *scene)
 			}
 			
 			pixelLight = pixelLight / raysPerPixel;
-			float m = std::max(pixelLight.x, std::max(pixelLight.y, pixelLight.z));
-			if(m > 1.)
-				pixelLight = pixelLight / m;
 			setPixel(x, y, pixelLight);
 		}
 	}

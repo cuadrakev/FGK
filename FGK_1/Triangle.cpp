@@ -45,9 +45,9 @@ Triangle &Triangle::operator=(Triangle const &t)
 	return *this;
 }
 
-HitData Triangle::intersects(Ray& ray, float maxT)
+HitData Triangle::intersects(Ray& ray, float maxT, float minT)
 {
-	HitData hitData{ HitData::Miss, -1, {0, 0, 0}, {0, 0, 0} };
+	HitData hitData{HitData::Miss};
 
 	float N_dot_dir = normal.DotProduct(ray.getDirection());
 
@@ -90,13 +90,13 @@ HitData Triangle::intersects(Ray& ray, float maxT)
 			{
 				float t = Mt.getDeterminant() / Mdet;
 
-				if (t > 0 and t < maxT)
+				if (t > minT and t < maxT)
 				{
-					hitData.distance = t;
 					hitData.result = HitData::Hit;
+					hitData.distance = t;
 					hitData.hitPoint = ray(t);
-					hitData.normal = normal;
-					hitData.material = mat.get();
+					hitData.hitPrimitive = this;
+					hitData.extraInfo = float3(1.f - beta - gamma, beta, gamma);
 				}
 			}
 		}

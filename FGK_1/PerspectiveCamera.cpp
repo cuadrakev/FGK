@@ -53,17 +53,16 @@ void PerspectiveCamera::renderScene(Scene *scene)
 				float3 dst = llCorner + horizontal * xx + vertical * yy - this->position;
 				dst = dst.Normalize();
 				Ray ray(this->position, dst);
-				HitData hit = scene->propagateRay(ray);
+				HitData hit = scene->propagateRay(ray, 999, 0);
 				if(hit.result != HitData::Miss)
 				{
-					currentLight += hit.material->K_a;
+					currentLight += hit.hitPrimitive->getMaterial()->K_a;
 					for(auto light: scene->getLights())
 					{
-						if(!light->isInShadow(hit, hit.hitPrimitive, scene))
+						if(!light->isInShadow(hit, scene))
 						{
-							float3 color = light->getDiffuse(this->position, hit) +
-										   light->getSpecular(this->position, hit);
-							currentLight = color + currentLight;
+							currentLight += light->getDiffuse(hit) +
+											light->getSpecular(this->position, hit);
 						}
 					}
 				}
@@ -72,9 +71,6 @@ void PerspectiveCamera::renderScene(Scene *scene)
 			}
 			
 			pixelLight = pixelLight / raysPerPixel;
-			float m = std::max(pixelLight.x, std::max(pixelLight.y, pixelLight.z));
-			if(m > 1.)
-				pixelLight = pixelLight / m;
 			setPixel(x, y, pixelLight);
 		}
 	}

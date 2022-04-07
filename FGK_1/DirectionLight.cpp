@@ -13,34 +13,34 @@ DirectionLight::DirectionLight(float3 _direction, float3 light): direction(_dire
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float3 DirectionLight::getDiffuse(float3 cameraPos, HitData hData)
+float3 DirectionLight::getDiffuse(HitData hData)
 {
-	float LdotN = hData.normal.DotProduct(-this->direction);
+	float LdotN = hData.hitPrimitive->getNormal(hData).DotProduct(-this->direction);
 	
 	if(LdotN > 0)
-		return this->lightColor * hData.material->K_d * LdotN;
+		return this->lightColor * hData.hitPrimitive->getMaterial()->K_d * LdotN;
 	else
 		return float3(0., 0., 0.);
 }
 
 float3 DirectionLight::getSpecular(float3 cameraPos, HitData hData)
 {
-	float3 V = float3(cameraPos - hData.hitPoint).Normalize();
-	float3 R = -this->direction;
-	R = R.Reflect(hData.normal);
-	float RdotV = R.DotProduct(V);
+	float3 V = cameraPos - hData.hitPoint;
+	float3 H = float3(-this->direction + V).Normalize();
+	float NdotH = hData.hitPrimitive->getNormal(hData).DotProduct(H);
 	
-	if(RdotV > 0)
-		return this->lightColor * hData.material->K_s * pow(RdotV, hData.material->N_s);
+	if(NdotH > 0)
+		return this->lightColor * hData.hitPrimitive->getMaterial()->K_s
+			   * pow(NdotH, hData.hitPrimitive->getMaterial()->N_s);
 	else
 		return float3(0., 0., 0.);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int DirectionLight::isInShadow(HitData hData, Primitive* prim, const Scene *scene)
+int DirectionLight::isInShadow(HitData hData, const Scene *scene)
 {
 	Ray ray(hData.hitPoint, -this->direction);
-	HitData shadowHit = scene->propagateShadowRay(ray, 999.f);
+	HitData shadowHit = scene->propagateShadowRay(ray, 999.f, 0.001);
 	
 	if(shadowHit.result != HitData::Miss)
 		return true;

@@ -1,14 +1,19 @@
 #pragma once
-#include <memory>
 
+#include "Material.h"
+
+class float3;
 class HitData;
 class Ray;
-class Material;
 
 class Primitive
 {
 public:
-	virtual HitData intersects(Ray &ray, float maxT) = 0;
+	virtual HitData intersects(Ray &ray, float maxT, float minT) = 0;
+	virtual float3 getNormal(HitData &data) = 0;
+	virtual Material *getMaterial() { return mat; }
 
-	std::shared_ptr<Material> mat;
+	virtual void setMaterial(Material *_mat) { mat = _mat; }
+private:
+	Material *mat;
 };

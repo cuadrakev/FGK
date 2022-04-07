@@ -11,11 +11,15 @@ Scene::Scene(unsigned int imageWidth, unsigned int imageHeight):
 {
 	//camera = new OrthoCamera(imageWidth, imageHeight, float3(0, 0, 0), float3(0, 0, -1));
 	camera = new PerspectiveCamera(imageWidth, imageHeight, float3(0, 0, 2.0), float3(0, 0, -1.), 3.14159265 / 2.);
+	
+	sdlInitialize();
+	creationTime = SDL_GetTicks();
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 Scene::~Scene()
 {
+	sdlTeardown();
 	if(camera != nullptr)
 	{
 		delete camera;
@@ -58,16 +62,14 @@ void Scene::addLight(Light *light)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Scene::propagateRay(Ray &ray) const
+HitData Scene::propagateRay(Ray &ray, float maxT, float minT) const
 {
-	float maxT = 999;
-	
 	HitData currentHit;
-	HitData closestHit{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	HitData closestHit{HitData::Miss};
 	for(auto &x: sceneObjects)
 	{
-		currentHit = x->intersects(ray, maxT);
-		if(currentHit.result == HitData::Hit and currentHit.distance < maxT)
+		currentHit = x->intersects(ray, maxT, minT);
+		if(currentHit.result == HitData::Hit)
 		{
 			maxT = currentHit.distance;
 			closestHit = currentHit;
@@ -78,19 +80,17 @@ HitData Scene::propagateRay(Ray &ray) const
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Scene::propagateShadowRay(Ray &ray, float maxT) const
+HitData Scene::propagateShadowRay(Ray &ray, float maxT, float minT) const
 {
-	HitData currentHit{HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	HitData currentHit{HitData::Miss};
 	for(auto &x: sceneObjects)
 	{
-		currentHit = x->intersects(ray, maxT);
-		if(currentHit.result != HitData::Miss and currentHit.distance < maxT and currentHit.distance > 0.01)
+		currentHit = x->intersects(ray, maxT, minT);
+		if(currentHit.result != HitData::Miss)
 		{
 			break;
 		}
 	}
-	if(currentHit.distance > maxT or currentHit.distance < 0.001)
-		currentHit.result = HitData::Miss;
 	
 	return currentHit;
 }
@@ -98,12 +98,11 @@ HitData Scene::propagateShadowRay(Ray &ray, float maxT) const
 
 void Scene::mainLoop()
 {
-	sdlInitialize();
-	
 	void *renderTexturePixels;
 	int renderTexturePitch;
 	
 	unsigned int startTime = SDL_GetTicks();
+	std::cout<<"Setup time: "<<startTime - creationTime<<"ms"<<std::endl;
 	camera->renderScene(this);
 	std::cout<<"Render time: "<<SDL_GetTicks() - startTime<<"ms"<<std::endl;
 	
@@ -128,6 +127,4 @@ void Scene::mainLoop()
 		SDL_RenderCopy(sdlRenderer, renderTexture, nullptr, nullptr);
 		SDL_RenderPresent(sdlRenderer);
 	}
-	
-	sdlTeardown();
 }
