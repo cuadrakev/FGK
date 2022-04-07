@@ -30,6 +30,9 @@ Triangle::Triangle(Triangle const &t)
 	B = vertex[1];
 	C = vertex[2];
 	normal = t.normal;
+	uv[0] = t.uv[0];
+	uv[1] = t.uv[1];
+	uv[2] = t.uv[2];
 }
 
 Triangle &Triangle::operator=(Triangle const &t)
@@ -41,6 +44,9 @@ Triangle &Triangle::operator=(Triangle const &t)
 	B = vertex[1];
 	C = vertex[2];
 	normal = t.normal;
+	uv[0] = t.uv[0];
+	uv[1] = t.uv[1];
+	uv[2] = t.uv[2];
 	
 	return *this;
 }
@@ -120,4 +126,10 @@ bool Triangle::pointInTriangle(float3 p)
 		CPB.DotProduct(normal) > mathlib::MINUS_ZERO)
 		return true;
 	return false;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float3 Triangle::getUV(HitData &data)
+{
+	return uv[0] * data.extraInfo.x + uv[1] * data.extraInfo.y + uv[2] * data.extraInfo.z;
 }

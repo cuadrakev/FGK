@@ -18,7 +18,14 @@ float3 DirectionLight::getDiffuse(HitData hData)
 	float LdotN = hData.hitPrimitive->getNormal(hData).DotProduct(-this->direction);
 	
 	if(LdotN > 0)
-		return this->lightColor * hData.hitPrimitive->getMaterial()->K_d * LdotN;
+	{
+		float3 color = hData.hitPrimitive->getMaterial()->K_d;
+		if(hData.hitPrimitive->getMaterial()->hasTexture())
+			color = color * hData.hitPrimitive->getMaterial()->
+					sampleTexture(hData.hitPrimitive->getUV(hData));
+		
+		return this->lightColor * color * LdotN;
+	}
 	else
 		return float3(0., 0., 0.);
 }

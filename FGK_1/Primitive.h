@@ -11,6 +11,7 @@ class Primitive
 public:
 	virtual HitData intersects(Ray &ray, float maxT, float minT) = 0;
 	virtual float3 getNormal(HitData &data) = 0;
+	virtual float3 getUV(HitData &data) = 0;
 	virtual Material *getMaterial() { return mat; }
 
 	virtual void setMaterial(Material *_mat) { mat = _mat; }

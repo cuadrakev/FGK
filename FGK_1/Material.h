@@ -14,8 +14,7 @@ public:
 	~Material();
 	
 	bool hasTexture() { return texture != nullptr; }
-	float3 sample2d(float3 pos);
-	float3 sampleSphere(float3 pos);
+	float3 sampleTexture(float3 pos);
 	
 private:
 	uint8_t *texture {nullptr};

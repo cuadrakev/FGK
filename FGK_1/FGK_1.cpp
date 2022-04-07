@@ -14,7 +14,7 @@ int main(int argv, char** args)
 	Scene scene(1024, 640);
 
 	Material sMat(float3(0.1, 0.1, 0.1), float3(0., 0., 0.), float3(1., 0., 0.), 1., 0., float3());
-	Material mMat(float3(0., 0., 0.), float3(1., 1., 1.), float3(1., 0., 1.), 20., 0., float3());
+	Material mMat(float3(0., 0., 0.), float3(1., 1., 1.), float3(1., 1., 1.), 20., 0., float3());
 
 	Sphere s(float3(0.7, 0, -0.3), 0.25);
 	s.setMaterial(&sMat);

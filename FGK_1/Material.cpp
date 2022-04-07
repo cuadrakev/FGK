@@ -13,7 +13,7 @@ Material::Material(float3 amb, float3 spec, float3 diff, float exp, float tran, 
 										&textureHeight,
 										&numberOfChannels, 0);
 		texture = new uint8_t[textureWidth * textureHeight * numberOfChannels];
-		memcpy(data, texture, textureWidth * textureHeight * numberOfChannels);
+		memcpy(texture, data, textureWidth * textureHeight * numberOfChannels);
 		stbi_image_free(data);
 	}
 }
@@ -26,19 +26,23 @@ Material::~Material()
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float3 Material::sample2d(float3 pos)
+float3 Material::sampleTexture(float3 pos)
 {
 	if(texture == nullptr)
 		return float3(0., 0., 0.);
 
+	if(pos.x > 1.)pos.x = 1.;
+	else if(pos.x < 0.)pos.x = 0.;
+	if(pos.y > 1.)pos.y = 1.;
+	else if(pos.y < 0.)pos.y = 0.;
 	int x = pos.x * (textureWidth - 1);
 	int y = pos.y * (textureHeight - 1);
 	
 	int texturePos = x * numberOfChannels + y * textureWidth * numberOfChannels;
 	float3 color;
-	color.x = texture[texturePos + 0] / 255.f;
-	color.y = texture[texturePos + 1] / 255.f;
-	color.z = texture[texturePos + 2] / 255.f;
+	color.x = float(texture[texturePos + 0]) / 255.f;
+	color.y = float(texture[texturePos + 1]) / 255.f;
+	color.z = float(texture[texturePos + 2]) / 255.f;
 	
 	return color;
 }

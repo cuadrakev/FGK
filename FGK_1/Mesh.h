@@ -14,6 +14,7 @@ public:
 	
 	virtual HitData intersects(Ray& ray, float maxT, float minT) override;
 	virtual float3 getNormal(HitData &data) override { return data.hitPrimitive->getNormal(data); }
+	virtual float3 getUV(HitData &data) override { return data.hitPrimitive->getUV(data); }
 	virtual void setMaterial(Material *_mat) override;
 private:
 	std::vector<Triangle> triangles;
