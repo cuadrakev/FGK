@@ -27,4 +27,11 @@ namespace mathlib {
 			return true;
 		return false;
 	}
+
+	inline float angle2rad(float angle)
+	{
+		float radians = angle * M_PI / 180.0f;
+
+		return radians;
+	}
 }
