@@ -125,11 +125,12 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles)
 	triangles.reserve(face.size() / 3);
 	for(unsigned int i = 0; i < face.size(); i += 3)
 	{
-		float3 v1(vertexPosition[face[i].a-1]);
-		float3 v2(vertexPosition[face[i+1].a-1]);
-		float3 v3(vertexPosition[face[i+2].a-1]);
-		Triangle triangle(v1, v2, v3);
-		triangle.setUV(uvPosition[face[i].b-1], uvPosition[face[i+1].b-1], uvPosition[face[i+2].b-1]);
+		Triangle triangle(vertexPosition[face[i].a-1],
+						  vertexPosition[face[i+1].a-1],
+						  vertexPosition[face[i+2].a-1],
+						  uvPosition[face[i].b-1],
+						  uvPosition[face[i+1].b-1],
+						  uvPosition[face[i+2].b-1]);
 		triangles.push_back(triangle);
 	}
 }

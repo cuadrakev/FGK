@@ -15,6 +15,6 @@ public:
 	virtual Material *getMaterial() { return mat; }
 
 	virtual void setMaterial(Material *_mat) { mat = _mat; }
-private:
+protected:
 	Material *mat;
 };
