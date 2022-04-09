@@ -11,14 +11,21 @@ PointLight::PointLight(float3 _pos, float3 light, float _cAtt, float _lAtt, floa
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-float3 PointLight::getDiffuse(float3 cameraPos, HitData hData)
+float3 PointLight::getDiffuse(HitData hData)
 {
 	float3 toLight = position - hData.hitPoint;
-	float dist = toLight.Length();
-	float LdotN = hData.normal.DotProduct(toLight.Normalize());
+	float LdotN = hData.hitPrimitive->getNormal(hData).DotProduct(toLight.Normalize());
 	
 	if(LdotN > 0)
-		return this->lightColor * hData.material->K_d * LdotN * attenuationValue(dist);
+	{
+		float3 color = hData.hitPrimitive->getMaterial()->K_d;
+		if(hData.hitPrimitive->getMaterial()->hasTexture())
+			color = color * hData.hitPrimitive->getMaterial()->
+					sampleTexture(hData.hitPrimitive->getUV(hData));
+		
+		return this->lightColor * color * LdotN
+			   * attenuationValue(toLight.Length());
+	}
 	else
 		return float3(0., 0., 0.);
 }
@@ -27,26 +34,26 @@ float3 PointLight::getDiffuse(float3 cameraPos, HitData hData)
 float3 PointLight::getSpecular(float3 cameraPos, HitData hData)
 {
 	float3 toLight = position - hData.hitPoint;
-	float dist = toLight.Length();
-	float3 V = float3(cameraPos - hData.hitPoint).Normalize();
-	float3 R = toLight.Normalize();
-	R = R.Reflect(hData.normal);
-	float RdotV = R.DotProduct(V);
+	float3 V = cameraPos - hData.hitPoint;
+	float3 H = float3(toLight + V).Normalize();
+	float NdotH = hData.hitPrimitive->getNormal(hData).DotProduct(H);
 	
-	if(RdotV > 0)
-		return this->lightColor * hData.material->K_s * pow(RdotV, hData.material->N_s) * attenuationValue(dist);
+	if(NdotH > 0)
+		return this->lightColor * hData.hitPrimitive->getMaterial()->K_s
+			   * pow(NdotH, hData.hitPrimitive->getMaterial()->N_s)
+			   * attenuationValue(toLight.Length());
 	else
 		return float3(0., 0., 0.);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-int PointLight::isInShadow(HitData hData, Primitive* prim, const Scene *scene)
+int PointLight::isInShadow(HitData hData, const Scene *scene)
 {
 	float3 toLight = position - hData.hitPoint;
 	float dist = toLight.Length();
 	
 	Ray ray(hData.hitPoint, toLight.Normalize());
-	HitData shadowHit = scene->propagateShadowRay(ray, dist);
+	HitData shadowHit = scene->propagateShadowRay(ray, dist, 0.001);
 	
 	if(shadowHit.result != HitData::Miss)
 		return true;

@@ -12,9 +12,9 @@ public:
 	Plane();
 	Plane(float3 normal, float d);
 	
-	HitData intersects(Ray &ray, float maxT) override;
-	
-	float3 getNormal() const { return normal; };
+	virtual HitData intersects(Ray &ray, float maxT, float minT) override;
+	virtual float3 getNormal(HitData &data) override { return normal; }
+	virtual float3 getUV(HitData &data) override { return data.hitPoint; }
 	
 private:
 	

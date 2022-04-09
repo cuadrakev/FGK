@@ -12,7 +12,9 @@ public:
 	Sphere();
 	Sphere(float3 center, float radius);
 	
-	HitData intersects(Ray &ray, float maxT) override;
+	virtual HitData intersects(Ray &ray, float maxT, float minT) override;
+	virtual float3 getNormal(HitData &data) override;
+	virtual float3 getUV(HitData &data) override { return float3(0, 0, 0); }//TODO sphere mapping
 	
 	float3 getCenter() const { return center; };
 	float getRadius() const { return radius; };

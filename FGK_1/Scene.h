@@ -19,8 +19,8 @@ public:
 	void addPrimitive(Primitive *obj);
 	void addLight(Light *light);
 	
-	HitData propagateRay(Ray &ray) const;
-	HitData propagateShadowRay(Ray &ray, float maxT) const;
+	HitData propagateRay(Ray &ray, float maxT, float minT) const;
+	HitData propagateShadowRay(Ray &ray, float maxT, float minT) const;
 	void mainLoop();
 	
 	const std::list<Primitive*> &getObjects() { return sceneObjects; }
@@ -34,6 +34,8 @@ private:
 	SDL_Renderer *sdlRenderer {nullptr};
 	SDL_Texture *renderTexture {nullptr};
 	bool quitRequest;
+	
+	unsigned int creationTime;
 
 	Camera *camera;
 	

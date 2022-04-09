@@ -13,9 +13,9 @@ public:
 	Light() = default;
 	Light(float3 color) : lightColor(color) {}
 
-	virtual float3 getDiffuse(float3 cameraPos, HitData hData) = 0;
+	virtual float3 getDiffuse(HitData hData) = 0;
 	virtual float3 getSpecular(float3 cameraPos, HitData hData) = 0;
-	virtual int isInShadow(HitData hData, Primitive* prim, const Scene *scene) = 0;
+	virtual int isInShadow(HitData hData, const Scene *scene) = 0;
 
 	void setLight(float3 light) { lightColor = light;}
 

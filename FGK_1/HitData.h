@@ -18,7 +18,6 @@ struct HitData
 	HitResult result;
 	float distance;
 	float3 hitPoint;
-	float3 normal;
-	Material *material;
 	Primitive *hitPrimitive;
+	float3 extraInfo;//only really used for triangle barycentrics
 };

@@ -48,10 +48,14 @@ void Camera::getRGBImage(void *data)
 	{
 		for(unsigned int x = 0; x < renderWidth; x++)
 		{
-			//TODO light normalization
-			surface[x * 3 + y * renderWidth * 3 + 0] = image[x + y * renderWidth].x * 255;
-			surface[x * 3 + y * renderWidth * 3 + 1] = image[x + y * renderWidth].y * 255;
-			surface[x * 3 + y * renderWidth * 3 + 2] = image[x + y * renderWidth].z * 255;
+			float3 color = image[x + y * renderWidth];
+			float m = std::max(color.x, std::max(color.y, color.z));
+			if(m > 1.)
+				color = color / m;
+			
+			surface[x * 3 + y * renderWidth * 3 + 0] = color.x * 255;
+			surface[x * 3 + y * renderWidth * 3 + 1] = color.y * 255;
+			surface[x * 3 + y * renderWidth * 3 + 2] = color.z * 255;
 		}
 	}
 }

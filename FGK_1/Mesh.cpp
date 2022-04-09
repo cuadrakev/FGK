@@ -125,16 +125,12 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles)
 	triangles.reserve(face.size() / 3);
 	for(unsigned int i = 0; i < face.size(); i += 3)
 	{
-		float3 v1(vertexPosition[face[i].a-1].x,
-				  vertexPosition[face[i].a-1].y,
-				  vertexPosition[face[i].a-1].z);
-		float3 v2(vertexPosition[face[i+1].a-1].x,
-				  vertexPosition[face[i+1].a-1].y,
-				  vertexPosition[face[i+1].a-1].z);
-		float3 v3(vertexPosition[face[i+2].a-1].x,
-				  vertexPosition[face[i+2].a-1].y,
-				  vertexPosition[face[i+2].a-1].z);
-		Triangle triangle(v1, v2, v3);
+		Triangle triangle(vertexPosition[face[i].a-1],
+						  vertexPosition[face[i+1].a-1],
+						  vertexPosition[face[i+2].a-1],
+						  uvPosition[face[i].b-1],
+						  uvPosition[face[i+1].b-1],
+						  uvPosition[face[i+2].b-1]);
 		triangles.push_back(triangle);
 	}
 }
@@ -149,10 +145,9 @@ Mesh::Mesh(std::string filename)
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-HitData Mesh::intersects(Ray& ray, float maxT)
+HitData Mesh::intersects(Ray& ray, float maxT, float minT)
 {
-	float minT = maxT;
-	HitData closestHit {HitData::Miss, -1, {0, 0, 0}, {0, 0, 0}};
+	HitData closestHit{HitData::Miss};
 	HitData currentHit;
 	
 	if(boundingBox.size() > 0)
@@ -160,7 +155,7 @@ HitData Mesh::intersects(Ray& ray, float maxT)
 		bool inBox {false};
 		for(auto &x: boundingBox)
 		{
-			currentHit = x.intersects(ray, maxT);
+			currentHit = x.intersects(ray, maxT, minT);
 			if(currentHit.result != HitData::Miss)
 			{
 				inBox = true;
@@ -173,17 +168,22 @@ HitData Mesh::intersects(Ray& ray, float maxT)
 	
 	for(auto &x: triangles)
 	{
-		currentHit = x.intersects(ray, minT);
+		currentHit = x.intersects(ray, maxT, minT);
 		if(currentHit.result != HitData::Miss)
 		{
 			closestHit = currentHit;
-			closestHit.material = this->mat.get();
-			closestHit.hitPrimitive = this;
-			minT = currentHit.distance;
+			maxT = currentHit.distance;
 		}
 	}
 	
 	return closestHit;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void Mesh::setMaterial(Material *_mat)
+{
+	for(auto &x: triangles)
+		reinterpret_cast<Primitive*>(&x)->setMaterial(_mat);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
