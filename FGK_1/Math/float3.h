@@ -67,10 +67,24 @@ public:
 	inline float3 operator * (float const& s) {
 		return float3(s*x, s*y, s*z);
 	}
+	inline float3 operator *= (float const& s) {
+		x *= s;
+		y *= s;
+		z *= s;
+		return *this;
+	}
 	inline float3 operator / (float const& s) {
 		float inv = 1.0f / s;
 		return float3(inv * x, inv * y, inv * z);
 	}
+	inline float3 operator /= (float const& s) {
+		float inv = 1.0f / s;
+		x *= inv;
+		y *= inv;
+		z *= inv;
+		return *this;
+	}
+
 	inline float3 operator = (float3 const& v) {
 		x = v.x;
 		y = v.y;
