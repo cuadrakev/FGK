@@ -56,7 +56,13 @@ void PerspectiveCamera::renderScene(Scene *scene)
 				HitData hit = scene->propagateRay(ray, 999, 0);
 				if(hit.result != HitData::Miss)
 				{
-					currentLight += hit.hitPrimitive->getMaterial()->K_a;
+					
+					if (hit.hitPrimitive->getMaterial()->hasTexture())
+						currentLight = hit.hitPrimitive->getMaterial()->K_a * hit.hitPrimitive->getMaterial()->
+						sampleTexture(hit.hitPrimitive->getUV(hit));
+					else
+						currentLight += hit.hitPrimitive->getMaterial()->K_a;
+
 					for(auto light: scene->getLights())
 					{
 						if(!light->isInShadow(hit, scene))

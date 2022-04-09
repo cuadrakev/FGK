@@ -91,22 +91,6 @@ HitData Triangle::intersects(Ray& ray, float maxT, float minT)
 
 	if (!mathlib::isZero(N_dot_dir))
 	{
-		//// method 1 - angles
-		//float t = (vertex[0].Length() - normal.DotProduct(ray.getOrigin())) / N_dot_dir;
-		//if (t > 0 and t < maxT)
-		//{
-		//	float3 crossPoint = ray(t);
-		//	if (pointInTriangle(crossPoint))
-		//	{
-		//		hitData.distance = t;
-		//		hitData.result = HitData::Hit;
-		//		hitData.hitPoint = crossPoint;
-		//		hitData.normal = normal;
-		//		hitData.color = color;
-		//	}
-		//}
-
-		// method 2 - Moller Trumbore
 		float3 AB = float3(B, A);
 		float3 AC = float3(C, A);
 		float3 AO = float3(ray.getOrigin(), A);
@@ -141,23 +125,6 @@ HitData Triangle::intersects(Ray& ray, float maxT, float minT)
 	}
 
 	return hitData;
-}
-
-bool Triangle::pointInTriangle(float3 p)
-{
-	float3 AP = A - p;
-	float3 BP = B - p;
-	float3 CP = C - p;
-
-	float3 BPA = BP.CrossProduct(AP);
-	float3 APC = AP.CrossProduct(CP);
-	float3 CPB = CP.CrossProduct(BP);
-
-	if (BPA.DotProduct(normal) > mathlib::MINUS_ZERO &&
-		APC.DotProduct(normal) > mathlib::MINUS_ZERO &&
-		CPB.DotProduct(normal) > mathlib::MINUS_ZERO)
-		return true;
-	return false;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

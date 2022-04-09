@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-#include <cmath>
+#include "Math/math_all.h"
 #include <iostream>
 
 Sphere::Sphere()
@@ -74,4 +74,28 @@ inline float3 Sphere::getNormal(HitData &data)
 	}
 	
 	return float3(0, 0, 0);
+}
+
+float3 Sphere::getUV(HitData& data)
+{
+	float3 relativeHit = data.hitPoint - center;
+	relativeHit = relativeHit.Normalize();
+
+	if (data.result != HitData::Miss)
+	{
+		float theta = std::acos(relativeHit.y);
+		float phi = std::atan2(relativeHit.x, relativeHit.z);
+
+		if (phi < 0)
+			phi += M_PI * 2;
+
+		//if (theta < 0)
+		//	theta += M_PI;
+
+		float u = phi / (2 * M_PI);
+		float v = theta / (M_PI);
+
+		return float3(u, v, 0);
+	}
+	return float3();
 }

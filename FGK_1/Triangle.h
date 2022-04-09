@@ -21,8 +21,6 @@ private:
 	float3 calculateNormal();
 	void calculateTangents();
 
-	bool pointInTriangle(float3 p);
-
 public:
 
 	Triangle(float3 A, float3 B, float3 C,
