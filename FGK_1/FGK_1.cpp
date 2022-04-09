@@ -8,6 +8,7 @@
 #include "PointLight.h"
 #include "LightIntensity.h"
 #include "Material.h"
+#include "Math/matTransform.h"
 
 int main(int argv, char** args)
 {
@@ -18,6 +19,7 @@ int main(int argv, char** args)
 
 	Sphere s(float3(0.7, 0, -0.3), 0.25);
 	s.setMaterial(&sMat);
+	
 	Mesh m("../models/cone.obj");
 	m.setMaterial(&mMat);
 	

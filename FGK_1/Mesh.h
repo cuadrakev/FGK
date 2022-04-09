@@ -5,12 +5,13 @@
 
 #include "Primitive.h"
 #include "Math/float3.h"
+#include "Math/float4x4.h"
 #include "Triangle.h"
 
 class Mesh: public Primitive
 {
 public:
-	Mesh(std::string filename);
+	Mesh(std::string filename, float4x4 const &transform = float4x4().identity4x4());
 	
 	virtual HitData intersects(Ray& ray, float maxT, float minT) override;
 	virtual float3 getNormal(HitData &data) override { return data.hitPrimitive->getNormal(data); }

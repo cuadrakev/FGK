@@ -34,7 +34,7 @@ static int3 loadVertex(std::string &index)
 	stream>>indexes.c;
 	return indexes;
 }
-///////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
 static std::vector<int3> loadFace(std::string &face)
 {
@@ -64,8 +64,10 @@ static std::vector<int3> loadFace(std::string &face)
 	return indexes;
 }
 
-////////////////////////////////////////////////////////////////
-static void loadObjFile(std::string filename, std::vector<Triangle> &triangles)
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
+						float4x4 &transform)
 {
 	std::ifstream file;
 	file.open(filename);
@@ -125,9 +127,18 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles)
 	triangles.reserve(face.size() / 3);
 	for(unsigned int i = 0; i < face.size(); i += 3)
 	{
-		Triangle triangle(vertexPosition[face[i].a-1],
-						  vertexPosition[face[i+1].a-1],
-						  vertexPosition[face[i+2].a-1],
+		float4 v1 = float4(vertexPosition[face[i].a-1], 1.);
+		float4 v2 = float4(vertexPosition[face[i+1].a-1], 1.);
+		float4 v3 = float4(vertexPosition[face[i+2].a-1], 1.);
+		v1 = transform * v1;
+		v2 = transform * v2;
+		v3 = transform * v3;
+		
+		float3 tv1 = float3(v1.x, v1.y, v1.z);
+		float3 tv2 = float3(v2.x, v2.y, v2.z);
+		float3 tv3 = float3(v3.x, v3.y, v3.z);
+		
+		Triangle triangle(tv1, tv2, tv3,
 						  uvPosition[face[i].b-1],
 						  uvPosition[face[i+1].b-1],
 						  uvPosition[face[i+2].b-1]);
@@ -137,9 +148,10 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-Mesh::Mesh(std::string filename)
+Mesh::Mesh(std::string filename, float4x4 const &transform)
 {
-	loadObjFile(filename, this->triangles);
+	float4x4 localTransform = transform;
+	loadObjFile(filename, this->triangles, localTransform);
 	if(triangles.size() > 24)
 		calculateBoundingBox();
 }
