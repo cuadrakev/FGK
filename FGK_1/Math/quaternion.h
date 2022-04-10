@@ -14,6 +14,8 @@ public:
 
 	quaternion(float s, float3 v) : r(s), vi(v) {}
 
+	quaternion(float3 v) : r(0), vi(v) {}
+
 	quaternion(float4 v);
 
 	quaternion operator=(const quaternion& q);
@@ -44,6 +46,6 @@ public:
 
 	quaternion Inverse();
 
-	float3 rotateVector(float angle, float3 v);
+	float3 rotateVector(float3 v);
 
 };

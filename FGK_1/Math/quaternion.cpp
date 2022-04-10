@@ -1,5 +1,4 @@
 #include "quaternion.h"
-#include <cmath>
 
 quaternion::quaternion(float4 v)
 {
@@ -128,13 +127,13 @@ quaternion quaternion::Inverse()
 	}
 }
 
-float3 quaternion::rotateVector(float angle, float3 v, float3 ax)
+float3 quaternion::rotateVector(float3 v)
 {
-	quaternion pure(0, v);
+	quaternion pure(v);
 
-	ax = ax.Normalize();
+	float3 nv = vi.Normalize();
 
-	quaternion q(angle, ax);
+	quaternion q(r, nv);
 
 	q = q.Normalize();
 
