@@ -103,6 +103,8 @@ void Mesh::loadObjFile(std::string filename, float4x4 &transform)
 		else if(str == "mtllib")
 		{
 			lineStream>>mtlFilename;
+			materials[""] = new Material(filePath + "/" + mtlFilename);
+			this->mat = materials[""];
 		}
 		else if(str == "usemtl" and mtlFilename != "")
 		{
@@ -179,8 +181,6 @@ Mesh::Mesh(std::string filename, float4x4 const &transform)
 {
 	float4x4 localTransform = transform;
 	loadObjFile(filename, localTransform);
-	if(materials.size() > 0)
-		this->mat = materials.begin()->second;
 	if(triangles.size() > 24)
 		calculateBoundingBox();
 }

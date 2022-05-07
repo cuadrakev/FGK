@@ -198,4 +198,6 @@ void Material::parseMtlFile(std::string filename, std::string materialName)
 			stbi_image_free(data);
 		}
 	}
+	
+	file.close();
 }

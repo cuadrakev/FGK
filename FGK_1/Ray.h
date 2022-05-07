@@ -23,6 +23,8 @@ public:
 	
 	float3 getOrigin() const { return origin; };
 	float3 getDirection() const { return direction; };
+	void setOrigin(float3 o) { origin = o; }
+	void setDirection(float3 d) { direction = d; }
 	float3 operator()(float t);
 };
 

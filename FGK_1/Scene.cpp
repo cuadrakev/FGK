@@ -100,24 +100,35 @@ HitData Scene::propagateShadowRay(Ray &ray, float maxT, float minT) const
 
 float3 Scene::getColor(Ray &ray)
 {
-	HitData hit = propagateRay(ray, 999, 0);
 	float3 color(0., 0., 0.);
 	
-	if(hit.result != HitData::Miss)
+	for(int rayCount = 0; rayCount < 3; rayCount++)
 	{
-		if(hit.hitPrimitive->getMaterial()->hasTexture())
-			color = hit.hitPrimitive->getMaterial()->K_a;
-		else
-			color = hit.hitPrimitive->getMaterial()->K_a;
+		HitData hit = propagateRay(ray, 999, 0.0001);
 		
-		for(auto light: sceneLights)
+		if(hit.result != HitData::Miss)
 		{
-			if(!light->isInShadow(hit, this))
+			if(hit.hitPrimitive->getMaterial()->materialType == Material::Reflective)
 			{
-				color += light->getDiffuse(hit) +
-						 light->getSpecular(hit.origin, hit);
+				ray.setOrigin(hit.hitPoint);
+				ray.setDirection((-ray.getDirection()).Reflect(hit.hitPrimitive->getNormal(hit)));
+				continue;
 			}
+			
+			color = hit.hitPrimitive->getMaterial()->K_a;
+			
+			for(auto light: sceneLights)
+			{
+				if(!light->isInShadow(hit, this))
+				{
+					color += light->getDiffuse(hit) +
+							 light->getSpecular(hit.origin, hit);
+				}
+			}
+			
 		}
+		
+		break;
 	}
 	
 	return color;
