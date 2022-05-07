@@ -5,6 +5,7 @@
 #include "Primitive.h"
 #include "HitData.h"
 #include "Ray.h"
+#include "Light.h"
 
 Scene::Scene(unsigned int imageWidth, unsigned int imageHeight):
 	camera(nullptr)
@@ -73,6 +74,7 @@ HitData Scene::propagateRay(Ray &ray, float maxT, float minT) const
 		{
 			maxT = currentHit.distance;
 			closestHit = currentHit;
+			closestHit.origin = ray.getOrigin();
 		}
 	}
 	
@@ -93,6 +95,32 @@ HitData Scene::propagateShadowRay(Ray &ray, float maxT, float minT) const
 	}
 	
 	return currentHit;
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+float3 Scene::getColor(Ray &ray)
+{
+	HitData hit = propagateRay(ray, 999, 0);
+	float3 color(0., 0., 0.);
+	
+	if(hit.result != HitData::Miss)
+	{
+		if(hit.hitPrimitive->getMaterial()->hasTexture())
+			color = hit.hitPrimitive->getMaterial()->K_a;
+		else
+			color = hit.hitPrimitive->getMaterial()->K_a;
+		
+		for(auto light: sceneLights)
+		{
+			if(!light->isInShadow(hit, this))
+			{
+				color += light->getDiffuse(hit) +
+						 light->getSpecular(hit.origin, hit);
+			}
+		}
+	}
+	
+	return color;
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

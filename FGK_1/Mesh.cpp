@@ -2,6 +2,7 @@
 
 #include <fstream>
 #include <sstream>
+#include <filesystem>
 
 #include "Math/int3.h"
 #include "HitData.h"
@@ -66,8 +67,7 @@ static std::vector<int3> loadFace(std::string &face)
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
-						float4x4 &transform)
+void Mesh::loadObjFile(std::string filename, float4x4 &transform)
 {
 	std::ifstream file;
 	file.open(filename);
@@ -79,6 +79,11 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
 	std::vector<float3> normals;
 	
 	std::vector<int3> face;//face format: x=pos, y=uv, z=normal
+	std::vector<Material*> faceMaterials;
+	
+	std::string filePath = std::filesystem::path(filename).parent_path();
+	std::string mtlFilename("");
+	Material *currentMaterial {nullptr};
 	
 	std::istringstream lineStream;
 	std::string str;
@@ -95,6 +100,26 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
 		
 		if(str[0] == '#')//comment
 			continue;
+		else if(str == "mtllib")
+		{
+			lineStream>>mtlFilename;
+		}
+		else if(str == "usemtl" and mtlFilename != "")
+		{
+			std::string mtlName;
+			lineStream>>mtlName;
+			
+			auto it = materials.find(mtlName);
+			if(it == materials.end())
+			{
+				materials[mtlName] = new Material(filePath + "/" + mtlFilename, mtlName);
+				currentMaterial = materials[mtlName];
+			}
+			else
+			{
+				currentMaterial = materials[mtlName];
+			}
+		}
 		else if(str == "v")//vertex position
 		{
 			float3 pos;
@@ -107,11 +132,11 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
 			lineStream>>uv.x>>uv.y;
 			uvPosition.push_back(uv);
 		}
-		else if(str == "vn")//TODO: normalize
+		else if(str == "vn")
 		{
 			float3 normal;
 			lineStream>>normal.x>>normal.y>>normal.z;
-			normals.push_back(normal);
+			normals.push_back(normal.Normalize());
 		}
 		else if(str == "f")//TODO: expect negative values
 		{
@@ -120,6 +145,7 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
 			std::vector<int3> indexes = loadFace(line);
 			for(auto x: indexes)
 				face.push_back(x);
+			faceMaterials.push_back(currentMaterial);
 		}
 	}
 	file.close();
@@ -143,6 +169,7 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
 						  uvPosition[face[i+1].b-1],
 						  uvPosition[face[i+2].b-1]);
 		triangles.push_back(triangle);
+		triangles.back().setMaterial(faceMaterials[i/3]);
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -151,9 +178,20 @@ static void loadObjFile(std::string filename, std::vector<Triangle> &triangles,
 Mesh::Mesh(std::string filename, float4x4 const &transform)
 {
 	float4x4 localTransform = transform;
-	loadObjFile(filename, this->triangles, localTransform);
+	loadObjFile(filename, localTransform);
+	if(materials.size() > 0)
+		this->mat = materials.begin()->second;
 	if(triangles.size() > 24)
 		calculateBoundingBox();
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Mesh::~Mesh()
+{
+	for(auto element: materials)
+	{
+		delete element.second;
+	}
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 

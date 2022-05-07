@@ -4,6 +4,8 @@
 
 #include <SDL2/SDL.h>
 
+#include "Math/float3.h"
+
 class Camera;
 class Primitive;
 class HitData;
@@ -21,6 +23,7 @@ public:
 	
 	HitData propagateRay(Ray &ray, float maxT, float minT) const;
 	HitData propagateShadowRay(Ray &ray, float maxT, float minT) const;
+	float3 getColor(Ray &ray);
 	void mainLoop();
 	
 	const std::list<Primitive*> &getObjects() { return sceneObjects; }

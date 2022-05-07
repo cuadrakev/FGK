@@ -17,6 +17,7 @@ struct HitData
 	
 	HitResult result;
 	float distance;
+	float3 origin;
 	float3 hitPoint;
 	Primitive *hitPrimitive;
 	float3 extraInfo;//only really used for triangle barycentrics

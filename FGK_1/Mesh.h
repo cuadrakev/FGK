@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 #include "Primitive.h"
 #include "Math/float3.h"
@@ -12,6 +13,7 @@ class Mesh: public Primitive
 {
 public:
 	Mesh(std::string filename, float4x4 const &transform = float4x4().identity4x4());
+	~Mesh();
 	
 	virtual HitData intersects(Ray& ray, float maxT, float minT) override;
 	virtual float3 getNormal(HitData &data) override { return data.hitPrimitive->getNormal(data); }
@@ -20,6 +22,8 @@ public:
 private:
 	std::vector<Triangle> triangles;
 	std::vector<Triangle> boundingBox;
+	std::map<std::string, Material*> materials;
 	
 	void calculateBoundingBox();
+	void loadObjFile(std::string filename, float4x4 &transform);
 };

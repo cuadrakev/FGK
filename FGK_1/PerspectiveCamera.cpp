@@ -53,27 +53,8 @@ void PerspectiveCamera::renderScene(Scene *scene)
 				float3 dst = llCorner + horizontal * xx + vertical * yy - this->position;
 				dst = dst.Normalize();
 				Ray ray(this->position, dst);
-				HitData hit = scene->propagateRay(ray, 999, 0);
-				if(hit.result != HitData::Miss)
-				{
-					
-					if (hit.hitPrimitive->getMaterial()->hasTexture())
-						currentLight = hit.hitPrimitive->getMaterial()->K_a * hit.hitPrimitive->getMaterial()->
-						sampleTexture(hit.hitPrimitive->getUV(hit));
-					else
-						currentLight += hit.hitPrimitive->getMaterial()->K_a;
-
-					for(auto light: scene->getLights())
-					{
-						if(!light->isInShadow(hit, scene))
-						{
-							currentLight += light->getDiffuse(hit) +
-											light->getSpecular(this->position, hit);
-						}
-					}
-				}
 				
-				pixelLight = pixelLight + currentLight;
+				pixelLight = pixelLight + scene->getColor(ray);
 			}
 			
 			pixelLight = pixelLight / raysPerPixel;
