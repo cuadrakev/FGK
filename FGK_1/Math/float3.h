@@ -26,6 +26,7 @@ public:
 	float3 Projection(float3 v);
 	float3 Orthogonal(float3 v);
 	float3 Reflect(float3 normal);
+	float3 Refract(float3 normal, float IOR);
 	float3 Lerp(float3 v, float t);
 	void saturate();
 	

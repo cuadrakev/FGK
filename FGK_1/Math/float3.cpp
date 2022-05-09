@@ -1,4 +1,5 @@
 #include "float3.h"
+#include <cmath>
 
 const float epsilon = 0.0001;
 
@@ -103,7 +104,17 @@ float3 float3::Orthogonal(float3 v)
 
 float3 float3::Reflect(float3 normal)
 {
-	return float3(x,y,z) - (Orthogonal(normal) *2);
+	return float3(x,y,z) - (Orthogonal(normal) * 2);
+}
+
+float3 float3::Refract(float3 normal, float ratio)
+{
+	float dp = DotProduct(normal);
+
+	float3 refracted = (*this - normal * dp) * ratio - normal * std::sqrt(1 - ratio * ratio * (1 - dp * dp));
+
+	return refracted;
+	// ref = rat*(*this - normal * (*this.dot(normal))) - normal * sqrt(1 - rat * rat * (1 - (*this.dot(normal)) * (*this.dot(normal))))
 }
 
 float3 float3::Lerp(float3 v, float t)

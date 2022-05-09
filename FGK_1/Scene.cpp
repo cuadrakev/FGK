@@ -114,6 +114,22 @@ float3 Scene::getColor(Ray &ray)
 				ray.setDirection((-ray.getDirection()).Reflect(hit.hitPrimitive->getNormal(hit)));
 				continue;
 			}
+
+			if (hit.hitPrimitive->getMaterial()->materialType == Material::Refractive)
+			{
+				ray.setOrigin(hit.hitPoint);
+				float ratio;
+				if (hit.result == HitData::InHit)
+				{
+					ratio = hit.hitPrimitive->getMaterial()->getIOR();
+				}
+				else
+				{
+					ratio = 1.0f/hit.hitPrimitive->getMaterial()->getIOR();
+				}
+				ray.setDirection((-ray.getDirection()).Refract(hit.hitPrimitive->getNormal(hit), ratio));
+				continue;
+			}
 			
 			color = hit.hitPrimitive->getMaterial()->K_a;
 			
