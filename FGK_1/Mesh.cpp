@@ -81,7 +81,7 @@ void Mesh::loadObjFile(std::string filename, float4x4 &transform)
 	std::vector<int3> face;//face format: x=pos, y=uv, z=normal
 	std::vector<Material*> faceMaterials;
 	
-	std::string filePath = std::filesystem::path(filename).parent_path();
+	std::string filePath = std::filesystem::path(filename).parent_path().string();
 	std::string mtlFilename("");
 	Material *currentMaterial {nullptr};
 	
