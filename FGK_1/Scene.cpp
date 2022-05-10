@@ -117,6 +117,8 @@ float3 Scene::getColor(Ray &ray)
 
 			if (hit.hitPrimitive->getMaterial()->materialType == Material::Refractive)
 			{
+				float dp = (-ray.getDirection()).DotProduct(hit.hitPrimitive->getNormal(hit));
+
 				ray.setOrigin(hit.hitPoint);
 				float ratio;
 				if (hit.result == HitData::InHit)
@@ -127,7 +129,13 @@ float3 Scene::getColor(Ray &ray)
 				{
 					ratio = 1.0f/hit.hitPrimitive->getMaterial()->getIOR();
 				}
-				ray.setDirection((-ray.getDirection()).Refract(hit.hitPrimitive->getNormal(hit), ratio));
+
+				if (1 - ratio * ratio * (1 - dp * dp) >= 0)
+				{
+					ray.setDirection((-ray.getDirection()).Refract(hit.hitPrimitive->getNormal(hit), ratio));
+				}
+
+				//ray.setDirection((-ray.getDirection()).Refract(hit.hitPrimitive->getNormal(hit), ratio));
 				continue;
 			}
 			

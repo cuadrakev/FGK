@@ -22,7 +22,7 @@ int main(int argv, char** args)
 
 	Material pMat(float3(0.1, 0.1, 0.1), float3(.0, .0, .0), float3(.5, .5, .5), 1., 0., float3(), "../textures/earth_diffuse.png");
 	pMat.materialType = Material::Refractive;
-	pMat.setIOR(1.33f);
+	pMat.setIOR(0.9f);
 
 	Sphere p(float3(-0.6, -0.6, -0.5), 0.25);
 	p.setMaterial(&pMat);
