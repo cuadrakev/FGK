@@ -70,7 +70,7 @@ HitData Scene::propagateRay(Ray &ray, float maxT, float minT) const
 	for(auto &x: sceneObjects)
 	{
 		currentHit = x->intersects(ray, maxT, minT);
-		if(currentHit.result == HitData::Hit)
+		if(currentHit.result == HitData::Hit || currentHit.result == HitData::InHit)
 		{
 			maxT = currentHit.distance;
 			closestHit = currentHit;
@@ -121,6 +121,8 @@ float3 Scene::getColor(Ray &ray)
 
 				ray.setOrigin(hit.hitPoint);
 				float ratio;
+				float3 refNor = hit.hitPrimitive->getNormal(hit);
+
 				if (hit.result == HitData::InHit)
 				{
 					ratio = hit.hitPrimitive->getMaterial()->getIOR();
@@ -130,10 +132,13 @@ float3 Scene::getColor(Ray &ray)
 					ratio = 1.0f/hit.hitPrimitive->getMaterial()->getIOR();
 				}
 
-				if (1 - ratio * ratio * (1 - dp * dp) >= 0)
-				{
-					ray.setDirection((-ray.getDirection()).Refract(hit.hitPrimitive->getNormal(hit), ratio));
-				}
+				ray.setDirection((ray.getDirection()).Refract(refNor, ratio));
+
+				//else
+				//{
+				//	//if (hit.result == HitData::InHit)
+				//		ray.setDirection((-ray.getDirection()).Reflect(-hit.hitPrimitive->getNormal(hit)));
+				//}
 
 				//ray.setDirection((-ray.getDirection()).Refract(hit.hitPrimitive->getNormal(hit), ratio));
 				continue;

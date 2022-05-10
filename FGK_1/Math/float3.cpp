@@ -109,12 +109,17 @@ float3 float3::Reflect(float3 normal)
 
 float3 float3::Refract(float3 normal, float ratio)
 {
-	float dp = DotProduct(normal);
+	float costheta = DotProduct(-normal);
+	float3 refracted;
 
-	float3 refracted = (*this - normal * dp) * ratio - normal * std::sqrt(1 - ratio * ratio * (1 - dp * dp));
+	float cosphi2 = 1 - ratio * ratio * (1 - costheta * costheta);
+
+	if (cosphi2 >= 0)
+		refracted = (*this + normal * costheta) * ratio - normal * std::sqrt(cosphi2);
+	else
+		refracted = -Reflect(normal);
 
 	return refracted;
-	// ref = rat*(*this - normal * (*this.dot(normal))) - normal * sqrt(1 - rat * rat * (1 - (*this.dot(normal)) * (*this.dot(normal))))
 }
 
 float3 float3::Lerp(float3 v, float t)
