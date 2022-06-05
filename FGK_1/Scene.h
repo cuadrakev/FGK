@@ -5,6 +5,7 @@
 #include <SDL2/SDL.h>
 
 #include "Math/float3.h"
+#include "KdTree.h"
 
 class Camera;
 class Primitive;
@@ -32,6 +33,9 @@ public:
 private:
 	void sdlInitialize();
 	void sdlTeardown();
+	
+	void createKdTree();
+	KdTree photonTree;
 	
 	SDL_Window *window {nullptr};
 	SDL_Renderer *sdlRenderer {nullptr};

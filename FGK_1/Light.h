@@ -5,6 +5,12 @@
 
 class Scene;
 
+enum LightType
+{
+	Point,
+	Directional
+};
+
 class Light
 {
 public:
@@ -16,8 +22,11 @@ public:
 	virtual float3 getDiffuse(HitData hData) = 0;
 	virtual float3 getSpecular(float3 cameraPos, HitData hData) = 0;
 	virtual int isInShadow(HitData hData, const Scene *scene) = 0;
+	virtual float3 getVector() = 0;
+	virtual LightType getType() = 0;
 
 	void setLight(float3 light) { lightColor = light;}
+	float3 getLight() { return lightColor; }
 
 protected:
 	float3 lightColor;

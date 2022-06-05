@@ -16,6 +16,8 @@ public:
 	virtual float3 getDiffuse(HitData hData) override;
 	virtual float3 getSpecular(float3 cameraPos, HitData hData) override;
 	virtual int isInShadow(HitData hData, const Scene *scene) override;
+	virtual float3 getVector() override { return position; }
+	virtual LightType getType() override { return LightType::Point; }
 
 private:
 	float3 position;

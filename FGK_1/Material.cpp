@@ -164,11 +164,11 @@ void Material::parseMtlFile(std::string filename, std::string materialName)
 			int type;
 			lineStream>>type;
 			if(type == 2)
-				materialType == Material::Normal;
+				materialType = Material::Normal;
 			else if(type == 3)
-				materialType == Material::Reflective;
+				materialType = Material::Reflective;
 			else if(type == 4)
-				materialType == Material::Refractive;
+				materialType = Material::Refractive;
 		}
 		else if(str == "map_Kd")
 		{

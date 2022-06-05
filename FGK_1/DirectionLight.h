@@ -13,6 +13,8 @@ public:
 	virtual float3 getDiffuse(HitData hData) override;
 	virtual float3 getSpecular(float3 cameraPos, HitData hData) override;
 	virtual int isInShadow(HitData hData, const Scene *scene) override;
+	virtual float3 getVector() override { return direction; }
+	virtual LightType getType() override { return LightType::Directional; }
 
 private:
 	float3 direction;
